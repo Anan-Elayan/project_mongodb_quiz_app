@@ -1,0 +1,2 @@
+arb-dir: lib/config/langtemplate-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
