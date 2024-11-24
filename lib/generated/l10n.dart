@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -48,116 +49,6 @@ class S {
 
   static S? maybeOf(BuildContext context) {
     return Localizations.of<S>(context, S);
-  }
-
-  /// `Is Japan the country that consumes the most electricity.`
-  String get question_1 {
-    return Intl.message(
-      'Is Japan the country that consumes the most electricity.',
-      name: 'question_1',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Covid 19 originated in America.`
-  String get question_2 {
-    return Intl.message(
-      'Covid 19 originated in America.',
-      name: 'question_2',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The Amazon River is the longest river in South America.`
-  String get question_3 {
-    return Intl.message(
-      'The Amazon River is the longest river in South America.',
-      name: 'question_3',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Ukraine is the largest country in Europe.`
-  String get question_4 {
-    return Intl.message(
-      'Ukraine is the largest country in Europe.',
-      name: 'question_4',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Sweden is the richest country in islands.`
-  String get question_5 {
-    return Intl.message(
-      'Sweden is the richest country in islands.',
-      name: 'question_5',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Mount Everest is located in Norway.`
-  String get question_6 {
-    return Intl.message(
-      'Mount Everest is located in Norway.',
-      name: 'question_6',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Mount Everest is located in Nepal.`
-  String get question_7 {
-    return Intl.message(
-      'Mount Everest is located in Nepal.',
-      name: 'question_7',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Is Türkiye considered one of the countries bordering the Black Sea.`
-  String get question_8 {
-    return Intl.message(
-      'Is Türkiye considered one of the countries bordering the Black Sea.',
-      name: 'question_8',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Canberra is the capital of Australia.`
-  String get question_9 {
-    return Intl.message(
-      'Canberra is the capital of Australia.',
-      name: 'question_9',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Alexander Fleming discovered penicillin in 1928.`
-  String get question_10 {
-    return Intl.message(
-      'Alexander Fleming discovered penicillin in 1928.',
-      name: 'question_10',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The femur is the strongest bone in the human body.`
-  String get question_11 {
-    return Intl.message(
-      'The femur is the strongest bone in the human body.',
-      name: 'question_11',
-      desc: '',
-      args: [],
-    );
   }
 
   /// `Finished`
@@ -285,6 +176,123 @@ class S {
     return Intl.message(
       'register',
       name: 'register',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get yes {
+    return Intl.message(
+      'yes',
+      name: 'yes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get no {
+    return Intl.message(
+      'no',
+      name: 'no',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get areYouSure {
+    return Intl.message(
+      'areYouSure',
+      name: 'areYouSure',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get addQuestion {
+    return Intl.message(
+      'addQuestion',
+      name: 'addQuestion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get choiceOne {
+    return Intl.message(
+      'choiceOne',
+      name: 'choiceOne',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get choiceTwo {
+    return Intl.message(
+      'choiceTwo',
+      name: 'choiceTwo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get choiceThree {
+    return Intl.message(
+      'choiceThree',
+      name: 'choiceThree',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get choiceFour {
+    return Intl.message(
+      'choiceFour',
+      name: 'choiceFour',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get enterTheQuestion {
+    return Intl.message(
+      'enterTheQuestion',
+      name: 'enterTheQuestion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get adminPanel {
+    return Intl.message(
+      'adminPanel',
+      name: 'adminPanel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get analytics {
+    return Intl.message(
+      'analytics',
+      name: 'analytics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get totalAdmins {
+    return Intl.message(
+      'totalAdmins',
+      name: 'totalAdmins',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get totalUsers {
+    return Intl.message(
+      'totalUsers',
+      name: 'totalUsers',
       desc: '',
       args: [],
     );

@@ -2,21 +2,16 @@ import 'package:app/screens/login_screen.dart';
 import 'package:app/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 
-const String url = 'http://10.0.2.2:3000';
+import '../generated/l10n.dart';
 
 class SplashScreen extends StatefulWidget {
-  final Function(Locale) setLocale;
-  final Locale locale; // Receive the current locale
-  const SplashScreen(
-      {super.key, required this.setLocale, required this.locale});
+  SplashScreen({super.key});
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  Locale _selectedLocale = const Locale('en'); // Default locale
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
         width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF00B4DB), Color(0xFF0083B0)], // Blue gradient
+            colors: [Color(0xFF00B4DB), Color(0xFF0083B0)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -40,51 +35,54 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 40),
 
             // Language Selection Radio Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Radio<Locale>(
-                  value: const Locale('en'),
-                  groupValue: _selectedLocale,
-                  onChanged: (Locale? value) {
-                    setState(() {
-                      _selectedLocale = value!;
-                    });
-                    widget.setLocale(
-                        _selectedLocale); // Update locale immediately
-                  },
-                  activeColor: Colors.white, // Set selected color to white
-                ),
-                const Text('English', style: TextStyle(color: Colors.white)),
-                Radio<Locale>(
-                  value: const Locale('ar'),
-                  groupValue: _selectedLocale,
-                  onChanged: (Locale? value) {
-                    setState(() {
-                      _selectedLocale = value!;
-                    });
-                    widget.setLocale(
-                        _selectedLocale); // Update locale immediately
-                  },
-                  activeColor: Colors.white, // Set selected color to white
-                ),
-                const Text('العربية', style: TextStyle(color: Colors.white)),
-              ],
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Radio<Locale>(
+            //       value: const Locale('en'),
+            //       groupValue: _selectedLocale,
+            //       onChanged: (Locale? value) {
+            //         setState(() {
+            //           _selectedLocale = value!;
+            //         });
+            //         widget.setLocale(
+            //             _selectedLocale); // Update locale immediately
+            //       },
+            //       activeColor: Colors.white, // Set selected color to white
+            //     ),
+            //     const Text('English', style: TextStyle(color: Colors.white)),
+            //     Radio<Locale>(
+            //       value: const Locale('ar'),
+            //       groupValue: _selectedLocale,
+            //       onChanged: (Locale? value) {
+            //         setState(() {
+            //           _selectedLocale = value!;
+            //         });
+            //         widget.setLocale(
+            //             _selectedLocale); // Update locale immediately
+            //       },
+            //       activeColor: Colors.white, // Set selected color to white
+            //     ),
+            //     const Text('العربية', style: TextStyle(color: Colors.white)),
+            //   ],
+            // ),
+            const Text(
+              "Palestinians Questions",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontFamily: 'Cairo',
+              ),
             ),
 
             const SizedBox(height: 40),
 
-            // Login Button
             ElevatedButton(
               onPressed: () {
-                widget.setLocale(_selectedLocale); // Set selected locale
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LoginScreen(
-                      setLocale: widget.setLocale,
-                      locale: _selectedLocale, // Pass the selected locale
-                    ),
+                    builder: (context) => LoginScreen(),
                   ),
                 );
               },
@@ -96,9 +94,9 @@ class _SplashScreenState extends State<SplashScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: const Text(
-                "Login",
-                style: TextStyle(
+              child: Text(
+                S.of(context).login,
+                style: const TextStyle(
                   color: Color(0xFF0083B0),
                   fontSize: 18,
                 ),
@@ -110,14 +108,9 @@ class _SplashScreenState extends State<SplashScreen> {
             // Register Button
             OutlinedButton(
               onPressed: () {
-                widget.setLocale(_selectedLocale); // Set selected locale
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => RegisterScreen(
-                            setLocale: widget.setLocale,
-                            locale: _selectedLocale, // Use selected locale here
-                          )),
+                  MaterialPageRoute(builder: (context) => RegisterScreen()),
                 );
               },
               style: OutlinedButton.styleFrom(
@@ -128,9 +121,9 @@ class _SplashScreenState extends State<SplashScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: const Text(
-                "Register",
-                style: TextStyle(
+              child: Text(
+                S.of(context).register,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
                 ),

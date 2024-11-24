@@ -29,31 +29,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "finished_desc": MessageLookupByLibrary.simpleMessage(
             "لقد وصلت إلى نهاية الاختبار."),
         "finished_title": MessageLookupByLibrary.simpleMessage("انتهى"),
+        "analytics": MessageLookupByLibrary.simpleMessage("التحليلات"),
+        "adminPanel": MessageLookupByLibrary.simpleMessage("لوحة التحكم"),
+        "enterTheQuestion": MessageLookupByLibrary.simpleMessage("أدخل السؤال"),
+        "totalAdmins": MessageLookupByLibrary.simpleMessage("إجمالي المسؤولين"),
+        "totalUsers": MessageLookupByLibrary.simpleMessage("إجمالي المستخدمين"),
+        "addQuestion": MessageLookupByLibrary.simpleMessage("إضافة سؤال"),
         "login": MessageLookupByLibrary.simpleMessage("دخول"),
         "name": MessageLookupByLibrary.simpleMessage("الاسم"),
         "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
-        "question_1": MessageLookupByLibrary.simpleMessage(
-            "تعتبر اليابان هي أكثر الدول استهلاكًا للكهرباء"),
-        "question_10": MessageLookupByLibrary.simpleMessage(
-            "اكتشف الكسندر فليمنج البنسلين عام 1928."),
-        "question_11": MessageLookupByLibrary.simpleMessage(
-            "عظام الفخذ هي أقوى عظام في جسم الإنسان."),
-        "question_2":
-            MessageLookupByLibrary.simpleMessage("نشأ مرض كوفيد 19 في أمريكا."),
-        "question_3": MessageLookupByLibrary.simpleMessage(
-            "يعتبر نهر الأمازون هو أطول نهر في أمريكا الجنوبية."),
-        "question_4": MessageLookupByLibrary.simpleMessage(
-            "أوكرانيا هي أكبر دولة في أوروبا."),
-        "question_5": MessageLookupByLibrary.simpleMessage(
-            "تعد السويد أغنى البلاد بالجزر."),
-        "question_6":
-            MessageLookupByLibrary.simpleMessage("تقع جبال ايفرست في النرويح."),
-        "question_7":
-            MessageLookupByLibrary.simpleMessage("تقع جبال ايفرست في نيبال."),
-        "question_8": MessageLookupByLibrary.simpleMessage(
-            "تعتبر تركيا من الدول المطلة على البحر الأسود."),
-        "question_9":
-            MessageLookupByLibrary.simpleMessage("كانبرا هي عاصمة استراليا."),
         "register": MessageLookupByLibrary.simpleMessage("تسجيل"),
         "registerAs": MessageLookupByLibrary.simpleMessage("سجل كـ"),
         "trueText": MessageLookupByLibrary.simpleMessage("صحيح"),

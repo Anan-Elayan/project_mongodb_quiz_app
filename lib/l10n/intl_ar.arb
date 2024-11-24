@@ -22,5 +22,18 @@
   "admin": "مدير",
   "user": "مستخدم",
   "login": "دخول",
-  "register":"تسجيل"
+  "register":"تسجيل",
+ "areYouSure": "هل انت متأكد من تسجيل الخروج",
+ "yes": "نعم",
+ "no": "لا",
+ "addQuestion": "إضافة سؤال",
+ "choiceOne": "الخيار الاول",
+ "choiceTwo": "الخيار الثاني",
+ "choiceThree": "الخيار الثالث",
+ "choiceFour": "الخيار الرابع",
+ "enterTheQuestion": "أدخل السؤال",
+ "adminPanel": "لوحة التحكم",
+ "analytics": "التحليلات",
+ "totalAdmins": "إجمالي المسؤولين",
+ "totalUsers": "إجمالي المستخدمين"
 }

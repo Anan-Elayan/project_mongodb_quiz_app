@@ -1,5 +1,8 @@
+import 'package:app/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../constant/constant.dart';
+import '../generated/l10n.dart';
 import '../route/route.dart';
 import 'add_question_page.dart';
 
@@ -11,6 +14,13 @@ class AdminPanel extends StatefulWidget {
 class _AdminPanelState extends State<AdminPanel> {
   int totalAdmins = 0;
   int totalUsers = 0;
+  Locale _locale = const Locale('en');
+
+  void _setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
 
   @override
   void initState() {
@@ -33,9 +43,33 @@ class _AdminPanelState extends State<AdminPanel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SettingScreen(),
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.settings,
+            ),
+          ),
+        ],
+        leading: IconButton(
+          icon: Icon(
+            Icons.exit_to_app,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            showLogoutConfirmationDialog(context);
+          },
+        ),
         automaticallyImplyLeading: false,
-        title: const Text(
-          "Admin Panel",
+        title: Text(
+          S.of(context).adminPanel,
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -53,8 +87,8 @@ class _AdminPanelState extends State<AdminPanel> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Analytics",
+                    Text(
+                      S.of(context).analytics,
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -151,8 +185,8 @@ class _AdminPanelState extends State<AdminPanel> {
                     Center(
                       child: ElevatedButton.icon(
                         icon: const Icon(Icons.add),
-                        label: const Text(
-                          "Add Question",
+                        label: Text(
+                          S.of(context).addQuestion,
                         ),
                         style: ElevatedButton.styleFrom(
                           primary: Colors.deepPurple,

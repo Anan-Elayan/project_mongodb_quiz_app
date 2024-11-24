@@ -16,7 +16,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _locale = const Locale('en');
+  Locale _locale = const Locale('ar');
 
   void _setLocale(Locale locale) {
     setState(() {
@@ -36,8 +36,7 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: S.delegate.supportedLocales,
       locale: _locale,
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(
-          setLocale: _setLocale, locale: _locale), // Pass locale and function
+      home: SplashScreen(),
     );
   }
 }

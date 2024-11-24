@@ -6,10 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../generated/l10n.dart';
 
 class RegisterScreen extends StatefulWidget {
-  final Function(Locale) setLocale;
-  final Locale locale;
-  const RegisterScreen(
-      {super.key, required this.setLocale, required this.locale});
+  const RegisterScreen({super.key});
 
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
@@ -65,10 +62,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => LoginScreen(
-            setLocale: widget.setLocale,
-            locale: widget.locale,
-          ),
+          builder: (context) => LoginScreen(),
         ),
       );
     }

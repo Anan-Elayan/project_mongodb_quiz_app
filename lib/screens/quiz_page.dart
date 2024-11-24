@@ -1,15 +1,13 @@
 import 'package:app/quiz_brain.dart';
+import 'package:app/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+import '../constant/constant.dart';
 import '../generated/l10n.dart';
 
 class QuizPage extends StatefulWidget {
-  final Function(Locale) setLocale;
-  final Locale locale;
-
-  const QuizPage({Key? key, required this.setLocale, required this.locale})
-      : super(key: key);
+  const QuizPage({Key? key}) : super(key: key);
 
   @override
   State<QuizPage> createState() => _QuizPageState();
@@ -20,15 +18,26 @@ class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
   bool isLoading = true;
   int? selectedChoice;
+  int mark = 0;
+  int numberQuestion = 1;
+  Locale _locale = const Locale('en');
+
+  void _setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     loadQuestions();
+    print(quizBrain.getQuestionRating());
   }
 
   Future<void> loadQuestions() async {
     await quizBrain.fetchQuestions();
+    await quizBrain.getTotalQuestionsCount();
     setState(() {
       isLoading = false;
     });
@@ -40,14 +49,33 @@ class _QuizPageState extends State<QuizPage> {
 
     setState(() {
       if (quizBrain.isFinished()) {
+        if (selectedChoiceText == correctAnswer) {
+          scoreKeeper.add(
+            const Icon(
+              Icons.check,
+              color: Colors.green,
+            ),
+          );
+          mark += quizBrain.getQuestionRating();
+        } else {
+          scoreKeeper.add(
+            const Icon(
+              Icons.close,
+              color: Colors.red,
+            ),
+          );
+        }
         Alert(
           context: context,
           title: S.of(context).finished_title,
-          desc: S.of(context).finished_desc,
+          desc:
+              '${S.of(context).finished_desc}\nTotal marks: ${mark} / ${quizBrain.getTotalRating()}',
         ).show();
 
         quizBrain.reset();
         scoreKeeper.clear();
+        mark = 0;
+        numberQuestion = 1;
       } else {
         if (selectedChoiceText == correctAnswer) {
           scoreKeeper.add(
@@ -56,6 +84,7 @@ class _QuizPageState extends State<QuizPage> {
               color: Colors.green,
             ),
           );
+          mark += quizBrain.getQuestionRating();
         } else {
           scoreKeeper.add(
             const Icon(
@@ -65,7 +94,8 @@ class _QuizPageState extends State<QuizPage> {
           );
         }
         quizBrain.nextQuestion();
-        selectedChoice = null; // Reset the radio button selection
+        numberQuestion++;
+        selectedChoice = null;
       }
     });
   }
@@ -75,6 +105,30 @@ class _QuizPageState extends State<QuizPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SettingScreen(),
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.settings,
+            ),
+          ),
+        ],
+        leading: IconButton(
+          icon: Icon(
+            Icons.exit_to_app,
+            color: Colors.red,
+          ),
+          onPressed: () {
+            showLogoutConfirmationDialog(context);
+          },
+        ),
         backgroundColor: Colors.black12.withOpacity(0.1),
         title: Text(
           S.of(context).appName,
@@ -94,19 +148,42 @@ class _QuizPageState extends State<QuizPage> {
               children: [
                 Expanded(
                   flex: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Center(
-                      child: Text(
-                        quizBrain.getQuestionText(),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 24.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "النقاط ${mark}/${quizBrain.getTotalRating()!}",
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "السؤال $numberQuestion من ${quizBrain.totalQuestions ?? 0}",
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Center(
+                          child: Text(
+                            quizBrain.getQuestionText(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 24.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(

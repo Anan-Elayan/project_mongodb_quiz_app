@@ -1,5 +1,6 @@
 import 'package:app/screens/admin_panel.dart'; // Import Admin Panel screen
 import 'package:app/screens/quiz_page.dart'; // Import Quiz page screen
+import 'package:app/services/pref.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -7,10 +8,7 @@ import '../generated/l10n.dart';
 import '../route/route.dart';
 
 class LoginScreen extends StatefulWidget {
-  final Function(Locale) setLocale;
-  final Locale locale;
-
-  const LoginScreen({super.key, required this.setLocale, required this.locale});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -19,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool saveData = false;
 
   Future<void> _login() async {
     String email = emailController.text.trim();
@@ -36,8 +35,10 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       return;
     }
+
     Routing routing = Routing();
     var response = await routing.login(email, password);
+
     if (response != null) {
       Fluttertoast.showToast(
         msg: response['message'],
@@ -48,16 +49,14 @@ class _LoginScreenState extends State<LoginScreen> {
         textColor: Colors.white,
         fontSize: 16.0,
       );
+
       if (response['message'] == "Login successful") {
         String registerAs = response['user']['registerAs'];
         if (registerAs == "User") {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => QuizPage(
-                setLocale: widget.setLocale,
-                locale: widget.locale,
-              ),
+              builder: (context) => QuizPage(),
             ),
           );
         } else if (registerAs == "Admin") {
@@ -68,6 +67,47 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           );
         }
+      }
+      if (saveData) {
+        String userId = await routing.getUserId(
+            emailController.text, passwordController.text);
+        if (userId != 0) {
+          saveUserId(userId);
+        } else {
+          print(userId);
+        }
+
+        isLogin(true);
+        saveEmail(emailController.text);
+        savePassword(passwordController.text);
+      } else {
+        // If the checkbox is not checked, clear saved data
+        isLogin(false);
+        saveEmail('');
+        savePassword('');
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedLoginInfo();
+    print("-------${getUserIdFromPref().toString()}");
+  }
+
+  Future<void> _loadSavedLoginInfo() async {
+    bool? isLoggedIn = await getLoginStatus();
+    if (isLoggedIn == true) {
+      String? savedEmail = await getEmail();
+      String? savedPassword = await getPassword();
+
+      if (savedEmail != null && savedPassword != null) {
+        emailController.text = savedEmail;
+        passwordController.text = savedPassword;
+        setState(() {
+          saveData = true; // Set the checkbox as checked if login data exists
+        });
       }
     }
   }
@@ -133,9 +173,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     ], // Specify password autofill
                   ),
                   const SizedBox(height: 30),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: saveData,
+                        onChanged: (value) {
+                          setState(() {
+                            saveData = value!;
+                          });
+                          // Save the checkbox state when changed
+                          saveRememberMe(saveData);
+                        },
+                      ),
+                      const Text("Remember me"),
+                    ],
+                  ),
                 ],
               ),
             ),
+            const SizedBox(height: 30),
             ElevatedButton(
               onPressed: _login,
               style: ElevatedButton.styleFrom(

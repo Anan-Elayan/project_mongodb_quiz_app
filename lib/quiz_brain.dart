@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app/constant/constant.dart';
+import 'package:app/route/route.dart';
 import 'package:http/http.dart' as http;
 
 class QuizBrain {
@@ -8,6 +9,8 @@ class QuizBrain {
   int _currentQuestionIndex = 0;
   bool isLoading = false;
   String errorMessage = '';
+  int? totalRating;
+  int? totalQuestions;
 
   Future<void> fetchQuestions() async {
     try {
@@ -21,6 +24,7 @@ class QuizBrain {
             "questionText": question['question'],
             "choices": question['choices'],
             "correctAnswer": question['correctAnswer'],
+            "questionRat": question['questionRat'],
           };
         }).toList();
         isLoading = false;
@@ -38,6 +42,31 @@ class QuizBrain {
     return _questionBank.isNotEmpty
         ? _questionBank[_currentQuestionIndex]["questionText"]
         : '';
+  }
+
+  int? getTotalRating() {
+    totalRating = 0;
+    for (int i = 0; i < _questionBank.length; i++) {
+      if (_questionBank[i]['questionRat'] != null) {
+        totalRating = (totalRating! + _questionBank[i]['questionRat']) as int?;
+      }
+    }
+    return totalRating;
+  }
+
+  Future<int?> getTotalQuestionsCount() async {
+    totalQuestions = 0;
+    Routing routing = Routing();
+    totalQuestions = await routing.getTotalQuestionCount();
+    print("total rating is ${totalQuestions}");
+    return totalQuestions;
+  }
+
+  int getQuestionRating() {
+    return _questionBank.isNotEmpty &&
+            _questionBank[_currentQuestionIndex]["questionRat"] != null
+        ? _questionBank[_currentQuestionIndex]["questionRat"]
+        : 0;
   }
 
   List<String> getChoices() {
