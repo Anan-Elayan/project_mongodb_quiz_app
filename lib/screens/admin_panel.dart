@@ -115,8 +115,8 @@ class _AdminPanelState extends State<AdminPanel> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  "Total Admins",
+                                Text(
+                                  S.of(context).totalAdmins,
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -158,8 +158,8 @@ class _AdminPanelState extends State<AdminPanel> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  "Total Users",
+                                Text(
+                                  S.of(context).totalUsers,
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,

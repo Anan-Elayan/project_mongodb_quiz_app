@@ -33,6 +33,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "adminPanel": MessageLookupByLibrary.simpleMessage("لوحة التحكم"),
         "enterTheQuestion": MessageLookupByLibrary.simpleMessage("أدخل السؤال"),
         "totalAdmins": MessageLookupByLibrary.simpleMessage("إجمالي المسؤولين"),
+        "areYouSure": MessageLookupByLibrary.simpleMessage(
+            "هل انت متأكد من تسجيل الخروج"),
+        "yes": MessageLookupByLibrary.simpleMessage("نعم"),
+        "no": MessageLookupByLibrary.simpleMessage("لا"),
         "totalUsers": MessageLookupByLibrary.simpleMessage("إجمالي المستخدمين"),
         "addQuestion": MessageLookupByLibrary.simpleMessage("إضافة سؤال"),
         "login": MessageLookupByLibrary.simpleMessage("دخول"),
