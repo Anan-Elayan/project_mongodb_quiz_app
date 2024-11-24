@@ -115,15 +115,15 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
               children: [
                 Text(
                   S.of(context).enterTheQuestion,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Your question",
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: S.of(context).yourQuestion,
+                    border: const OutlineInputBorder(),
                   ),
                   maxLines: 3,
                   validator: (value) =>
@@ -131,9 +131,9 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
                   onSaved: (value) => questionText = value!,
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  "Enter the answer choices:",
-                  style: TextStyle(
+                Text(
+                  S.of(context).enterTheQuestion,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -144,7 +144,7 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
                     child: TextFormField(
                       controller: choiceControllers[i],
                       decoration: InputDecoration(
-                        labelText: "Choice ${i + 1}",
+                        labelText: "${S.of(context).choices} ${i + 1}",
                         border: const OutlineInputBorder(),
                       ),
                       validator: (value) => value!.isEmpty
@@ -153,8 +153,8 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
                     ),
                   ),
                 const SizedBox(height: 20),
-                const Text(
-                  "Select the correct answer:",
+                Text(
+                  S.of(context).selectTheCorrectAnswer,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -227,9 +227,9 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  "Select the question rating:",
-                  style: TextStyle(
+                Text(
+                  S.of(context).selectTheQuestionRating,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),

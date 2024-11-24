@@ -35,5 +35,10 @@
  "adminPanel": "لوحة التحكم",
  "analytics": "التحليلات",
  "totalAdmins": "إجمالي المسؤولين",
- "totalUsers": "إجمالي المستخدمين"
+ "totalUsers": "إجمالي المستخدمين",
+ "yourQuestion": "سؤالك",
+ "enterTheAnswerChoices": "أدخل خيارات الإجابة",
+ "choices": "خَـيـار",
+ "selectTheCorrectAnswer": "اختر الإجابة الصحيحة",
+ "selectTheQuestionRating": "حدد علامة السؤال"
 }

@@ -36,6 +36,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "areYouSure": MessageLookupByLibrary.simpleMessage(
             "هل انت متأكد من تسجيل الخروج"),
         "yes": MessageLookupByLibrary.simpleMessage("نعم"),
+        "choices": MessageLookupByLibrary.simpleMessage("خَـيـار"),
+        "selectTheQuestionRating":
+            MessageLookupByLibrary.simpleMessage("حدد تقييم السؤال"),
+        "selectTheCorrectAnswer":
+            MessageLookupByLibrary.simpleMessage("اختر الإجابة الصحيحة"),
+        "yourQuestion": MessageLookupByLibrary.simpleMessage("سؤالك"),
+        "enterTheAnswerChoices":
+            MessageLookupByLibrary.simpleMessage("أدخل خيارات الإجابة"),
         "no": MessageLookupByLibrary.simpleMessage("لا"),
         "totalUsers": MessageLookupByLibrary.simpleMessage("إجمالي المستخدمين"),
         "addQuestion": MessageLookupByLibrary.simpleMessage("إضافة سؤال"),

@@ -14,13 +14,6 @@ class AdminPanel extends StatefulWidget {
 class _AdminPanelState extends State<AdminPanel> {
   int totalAdmins = 0;
   int totalUsers = 0;
-  Locale _locale = const Locale('en');
-
-  void _setLocale(Locale locale) {
-    setState(() {
-      _locale = locale;
-    });
-  }
 
   @override
   void initState() {
@@ -89,7 +82,7 @@ class _AdminPanelState extends State<AdminPanel> {
                   children: [
                     Text(
                       S.of(context).analytics,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
@@ -117,7 +110,7 @@ class _AdminPanelState extends State<AdminPanel> {
                               children: [
                                 Text(
                                   S.of(context).totalAdmins,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.blue,
@@ -160,7 +153,7 @@ class _AdminPanelState extends State<AdminPanel> {
                               children: [
                                 Text(
                                   S.of(context).totalUsers,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.green,

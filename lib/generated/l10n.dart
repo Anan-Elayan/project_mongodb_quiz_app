@@ -297,6 +297,42 @@ class S {
       args: [],
     );
   }
+
+  String get yourQuestion {
+    return Intl.message(
+      'yourQuestion',
+      name: 'yourQuestion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get choices {
+    return Intl.message(
+      'choices',
+      name: 'choices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get selectTheCorrectAnswer {
+    return Intl.message(
+      'selectTheCorrectAnswer',
+      name: 'selectTheCorrectAnswer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get selectTheQuestionRating {
+    return Intl.message(
+      'selectTheQuestionRating',
+      name: 'selectTheQuestionRating',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

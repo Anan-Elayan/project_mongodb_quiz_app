@@ -32,6 +32,28 @@ class MessageLookup extends MessageLookupByLibrary {
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "question_1": MessageLookupByLibrary.simpleMessage(
+            "Is Japan the country that consumes the most electricity."),
+        "question_10": MessageLookupByLibrary.simpleMessage(
+            "Alexander Fleming discovered penicillin in 1928."),
+        "question_11": MessageLookupByLibrary.simpleMessage(
+            "The femur is the strongest bone in the human body."),
+        "question_2": MessageLookupByLibrary.simpleMessage(
+            "Covid 19 originated in America."),
+        "question_3": MessageLookupByLibrary.simpleMessage(
+            "The Amazon River is the longest river in South America."),
+        "question_4": MessageLookupByLibrary.simpleMessage(
+            "Ukraine is the largest country in Europe."),
+        "question_5": MessageLookupByLibrary.simpleMessage(
+            "Sweden is the richest country in islands."),
+        "question_6": MessageLookupByLibrary.simpleMessage(
+            "Mount Everest is located in Norway."),
+        "question_7": MessageLookupByLibrary.simpleMessage(
+            "Mount Everest is located in Nepal."),
+        "question_8": MessageLookupByLibrary.simpleMessage(
+            "Is Türkiye considered one of the countries bordering the Black Sea."),
+        "question_9": MessageLookupByLibrary.simpleMessage(
+            "Canberra is the capital of Australia."),
         "register": MessageLookupByLibrary.simpleMessage("register"),
         "registerAs": MessageLookupByLibrary.simpleMessage("Register as"),
         "trueText": MessageLookupByLibrary.simpleMessage("True"),
