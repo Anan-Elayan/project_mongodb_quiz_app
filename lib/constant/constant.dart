@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 
-import '../generated/l10n.dart';
 import '../screens/splash_screen.dart';
 
-const String apiUrl = 'http://192.168.88.5:3000';
+const String apiUrl = 'http://192.168.88.7:3000';
 //10.0.2.2
 void showLogoutConfirmationDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(S.of(context).areYouSure),
+        title: Text("Are you sure to exit ?"),
         actions: <Widget>[
           TextButton(
-            child: Text(S.of(context).no),
+            child: Text("No"),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
           TextButton(
-            child: Text(S.of(context).yes),
+            child: Text("Yes"),
             onPressed: () {
               Navigator.of(context).pop();
               Navigator.pushAndRemoveUntil(

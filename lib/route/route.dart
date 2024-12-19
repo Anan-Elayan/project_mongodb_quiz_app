@@ -8,22 +8,63 @@ class Routing {
     String name,
     String email,
     String password,
-    String registerAs,
+    String role,
+    String selectedTeacher,
   ) async {
     try {
-      NetworkingHelper networkingHelper =
-          NetworkingHelper("$apiUrl/users/register");
-      Map<String, dynamic> body = {
-        "name": name,
-        "email": email,
-        "password": password,
-        "registerAs": registerAs,
-      };
-      var response = await networkingHelper.postData(body);
-      return response;
+      if (role == 'Teacher') {
+        NetworkingHelper networkingHelper =
+            NetworkingHelper("$apiUrl/users/register");
+        Map<String, dynamic> body = {
+          "name": name,
+          "email": email,
+          "password": password,
+          "role": role,
+        };
+        var response = await networkingHelper.postData(body);
+        return response;
+      } else {
+        NetworkingHelper networkingHelper =
+            NetworkingHelper("$apiUrl/users/register");
+        Map<String, dynamic> body = {
+          "name": name,
+          "email": email,
+          "password": password,
+          "role": role,
+          "teacher_id": selectedTeacher,
+        };
+        var response = await networkingHelper.postData(body);
+        return response;
+      }
     } catch (e) {
       print("Error registering user: $e");
       return null;
+    }
+  }
+
+  Future<List<Map<String, String>>> getTeachersIdAndName() async {
+    try {
+      NetworkingHelper networkingHelper =
+          NetworkingHelper("$apiUrl/users/getTeachers");
+      var response = await networkingHelper.getDataAsList();
+      if (response != null && response is List) {
+        List<Map<String, String>> teachers = [];
+        for (int i = 0; i < response.length; i++) {
+          Map<String, dynamic> item = response[i];
+          teachers.add({
+            "id": item["_id"] ?? "",
+            "name": item["name"] ?? "",
+          });
+        }
+        print("response in getTeachers ${response}");
+        return teachers;
+      } else {
+        print("Invalid response format or null response");
+        return [];
+      }
+    } catch (e) {
+      print("Error fetching teachers: $e");
+      return [];
     }
   }
 
@@ -49,9 +90,8 @@ class Routing {
           NetworkingHelper("$apiUrl/users/analytics");
       var response = await networkingHelper.getData();
       if (response != null) {
-        int totalAdmins = response['totalAdmins'] ?? 0;
-        int totalUsers = response['totalUsers'] ?? 0;
-        return {'totalAdmins': totalAdmins, 'totalUsers': totalUsers};
+        int totalStudents = response['totalStudents'] ?? 0;
+        return {'totalStudents': totalStudents};
       } else {
         return null;
       }

@@ -1,10 +1,9 @@
-import 'package:app/screens/admin_panel.dart'; // Import Admin Panel screen
 import 'package:app/screens/quiz_page.dart'; // Import Quiz page screen
+import 'package:app/screens/teachers_panel.dart'; // Import Teacher Panel screen
 import 'package:app/services/pref.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../generated/l10n.dart';
 import '../route/route.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -51,19 +50,20 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (response['message'] == "Login successful") {
-        String registerAs = response['user']['registerAs'];
-        if (registerAs == "User") {
+        print(response);
+        String registerAs = response['user']['role'];
+        if (registerAs == "student") {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => QuizPage(),
             ),
           );
-        } else if (registerAs == "Admin") {
+        } else if (registerAs == "teacher") {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AdminPanel(),
+              builder: (context) => TeacherPanel(),
             ),
           );
         }
@@ -81,7 +81,6 @@ class _LoginScreenState extends State<LoginScreen> {
         saveEmail(emailController.text);
         savePassword(passwordController.text);
       } else {
-        // If the checkbox is not checked, clear saved data
         isLogin(false);
         saveEmail('');
         savePassword('');
@@ -93,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _loadSavedLoginInfo();
-    print("-------${getUserIdFromPref().toString()}");
+    print("-------\${getUserIdFromPref().toString()}");
   }
 
   Future<void> _loadSavedLoginInfo() async {
@@ -106,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
         emailController.text = savedEmail;
         passwordController.text = savedPassword;
         setState(() {
-          saveData = true; // Set the checkbox as checked if login data exists
+          saveData = true;
         });
       }
     }
@@ -114,65 +113,93 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String emailLabel = S.of(context).email;
-    String passwordLabel = S.of(context).password;
-    String loginLabel = S.of(context).login;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(loginLabel),
-        backgroundColor: const Color(0xFF00B4DB),
+        title: const Text(
+          "Login",
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF6DD5FA), Color(0xFF2980B9)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AutofillGroup(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFEAF6FF), Color(0xFFB2E0F7)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: SingleChildScrollView(
               child: Column(
-                children: <Widget>[
-                  TextFormField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      labelText: emailLabel,
-                      labelStyle: const TextStyle(
-                        color: Colors.black,
-                      ),
-                      fillColor: Colors.white,
-                      filled: true,
-                      border: const OutlineInputBorder(),
-                      prefixIcon: const Icon(
-                        Icons.email,
-                        color: Colors.black,
-                      ),
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    autofillHints: const [
-                      AutofillHints.email
-                    ], // Specify email autofill
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.login,
+                    size: 80,
+                    color: Color(0xFF2980B9),
                   ),
                   const SizedBox(height: 20),
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: passwordLabel,
-                      labelStyle: const TextStyle(
-                        color: Colors.black,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: TextFormField(
+                      controller: emailController,
+                      decoration: const InputDecoration(
+                        hintText: "Email",
+                        prefixIcon: Icon(Icons.email, color: Color(0xFF2980B9)),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(15),
                       ),
-                      fillColor: Colors.white,
-                      filled: true,
-                      border: const OutlineInputBorder(),
-                      prefixIcon: const Icon(
-                        Icons.lock,
-                        color: Colors.black,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: TextFormField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        hintText: "Password",
+                        prefixIcon: Icon(Icons.lock, color: Color(0xFF2980B9)),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(15),
                       ),
                     ),
-                    autofillHints: const [
-                      AutofillHints.password
-                    ], // Specify password autofill
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
                   Row(
                     children: [
                       Checkbox(
@@ -181,34 +208,35 @@ class _LoginScreenState extends State<LoginScreen> {
                           setState(() {
                             saveData = value!;
                           });
-                          // Save the checkbox state when changed
-                          saveRememberMe(saveData);
                         },
                       ),
                       const Text("Remember me"),
                     ],
                   ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _login,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 15,
+                        horizontal: 50,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 5,
+                      backgroundColor: const Color(0xFF2980B9),
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
                 ],
               ),
             ),
-            const SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: _login,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF00B4DB),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 15,
-                  horizontal: 50,
-                ),
-              ),
-              child: Text(
-                loginLabel,
-                style: const TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

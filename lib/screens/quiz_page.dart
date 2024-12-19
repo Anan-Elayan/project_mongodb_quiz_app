@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../constant/constant.dart';
-import '../generated/l10n.dart';
 
 class QuizPage extends StatefulWidget {
   const QuizPage({Key? key}) : super(key: key);
@@ -67,9 +66,9 @@ class _QuizPageState extends State<QuizPage> {
         }
         Alert(
           context: context,
-          title: S.of(context).finished_title,
+          title: 'Finish',
           desc:
-              '${S.of(context).finished_desc}\nTotal marks: ${mark} / ${quizBrain.getTotalRating()}',
+              '${"You have reached the end of the quiz."}\nTotal marks: ${mark} / ${quizBrain.getTotalRating()}',
         ).show();
 
         quizBrain.reset();
@@ -121,7 +120,7 @@ class _QuizPageState extends State<QuizPage> {
           ),
         ],
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.exit_to_app,
             color: Colors.red,
           ),
@@ -131,7 +130,7 @@ class _QuizPageState extends State<QuizPage> {
         ),
         backgroundColor: Colors.black12.withOpacity(0.1),
         title: Text(
-          S.of(context).appName,
+          'Quiz App',
           style: const TextStyle(
             color: Colors.white,
             fontSize: 25,

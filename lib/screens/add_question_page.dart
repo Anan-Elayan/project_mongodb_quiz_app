@@ -1,8 +1,6 @@
 import 'package:app/route/route.dart';
 import 'package:flutter/material.dart';
 
-import '../generated/l10n.dart';
-
 class AddQuestionScreen extends StatefulWidget {
   @override
   _AddQuestionScreenState createState() => _AddQuestionScreenState();
@@ -98,189 +96,177 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          S.of(context).addQuestion,
+        title: const Text(
+          "Add Question",
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),
+        centerTitle: true,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF6DD5FA), Color(0xFF2980B9)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  S.of(context).enterTheQuestion,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFEAF6FF), Color(0xFFB2E0F7)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Enter Question",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF2980B9),
+                    ),
                   ),
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: S.of(context).yourQuestion,
-                    border: const OutlineInputBorder(),
-                  ),
-                  maxLines: 3,
-                  validator: (value) =>
-                      value!.isEmpty ? "Please enter a question" : null,
-                  onSaved: (value) => questionText = value!,
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  S.of(context).enterTheQuestion,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                for (int i = 0; i < 4; i++)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: TextFormField(
-                      controller: choiceControllers[i],
-                      decoration: InputDecoration(
-                        labelText: "${S.of(context).choices} ${i + 1}",
-                        border: const OutlineInputBorder(),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: "Your question",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      validator: (value) => value!.isEmpty
-                          ? "Please enter choice ${i + 1}"
-                          : null,
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    maxLines: 3,
+                    validator: (value) =>
+                        value!.isEmpty ? "Please enter a question" : null,
+                    onSaved: (value) => questionText = value!,
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    "Enter Choices",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF2980B9),
                     ),
                   ),
-                const SizedBox(height: 20),
-                Text(
-                  S.of(context).selectTheCorrectAnswer,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: RadioListTile<String>(
-                            value: choices[0],
-                            groupValue: correctAnswer,
-                            onChanged: (value) {
-                              setState(() {
-                                correctAnswer = value!;
-                              });
-                            },
-                            title: Text(choices[0]),
+                  const SizedBox(height: 10),
+                  for (int i = 0; i < 4; i++)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: TextFormField(
+                        controller: choiceControllers[i],
+                        decoration: InputDecoration(
+                          labelText: "Choice ${i + 1}",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
+                          filled: true,
+                          fillColor: Colors.white,
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: RadioListTile<String>(
-                            value: choices[1],
-                            groupValue: correctAnswer,
-                            onChanged: (value) {
-                              setState(() {
-                                correctAnswer = value!;
-                              });
-                            },
-                            title: Text(choices[1]),
-                          ),
-                        ),
-                      ],
+                        validator: (value) => value!.isEmpty
+                            ? "Please enter choice ${i + 1}"
+                            : null,
+                      ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: RadioListTile<String>(
-                            value: choices[2],
-                            groupValue: correctAnswer,
-                            onChanged: (value) {
-                              setState(() {
-                                correctAnswer = value!;
-                              });
-                            },
-                            title: Text(choices[2]),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: RadioListTile<String>(
-                            value: choices[3],
-                            groupValue: correctAnswer,
-                            onChanged: (value) {
-                              setState(() {
-                                correctAnswer = value!;
-                              });
-                            },
-                            title: Text(
-                              choices[3],
-                            ),
-                          ),
-                        ),
-                      ],
+                  const SizedBox(height: 20),
+                  const Text(
+                    "Select the Correct Answer",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF2980B9),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  S.of(context).selectTheQuestionRating,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
                   ),
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: ratingController,
-                  decoration: const InputDecoration(
-                    labelText: "Question Rating",
-                    border: OutlineInputBorder(),
+                  const SizedBox(height: 10),
+                  Column(
+                    children: choices.map((choice) {
+                      return RadioListTile<String>(
+                        value: choice,
+                        groupValue: correctAnswer,
+                        onChanged: (value) {
+                          setState(() {
+                            correctAnswer = value!;
+                          });
+                        },
+                        title:
+                            Text(choice.isNotEmpty ? choice : "Enter Choice"),
+                      );
+                    }).toList(),
                   ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter the question rating";
-                    }
-                    if (int.tryParse(value) == null ||
-                        int.parse(value) < 1 ||
-                        int.parse(value) > 5) {
-                      return "Please enter a valid rating between 1 and 5";
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    ratingController.text = value!;
-                  },
-                ),
-                const SizedBox(height: 20),
-                Center(
-                  child: isLoading
-                      ? const CircularProgressIndicator()
-                      : ElevatedButton(
-                          onPressed: submitQuestion,
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 16,
-                              horizontal: 40,
-                            ),
-                            textStyle: const TextStyle(
-                              fontSize: 18,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                12,
+                  const SizedBox(height: 20),
+                  const Text(
+                    "Question Rating (1 to 5)",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF2980B9),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: ratingController,
+                    decoration: InputDecoration(
+                      labelText: "Rating",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Please enter the question rating";
+                      }
+                      if (int.tryParse(value) == null ||
+                          int.parse(value) < 1 ||
+                          int.parse(value) > 5) {
+                        return "Please enter a valid rating between 1 and 5";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      ratingController.text = value!;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: isLoading
+                        ? const CircularProgressIndicator()
+                        : ElevatedButton(
+                            onPressed: submitQuestion,
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 40,
+                              ),
+                              backgroundColor: const Color(0xFF2980B9),
+                              foregroundColor: Colors.white,
+                              textStyle: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
                               ),
                             ),
+                            child: const Text("Submit"),
                           ),
-                          child: const Text("Submit"),
-                        ),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

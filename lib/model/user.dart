@@ -3,14 +3,16 @@ class User {
   final String? email;
   final String? name;
   final String? password;
-  final String? registerAs;
+  final String? role;
+  final String? selectedTeacher;
 
   User({
     this.id,
     required this.name,
     required this.password,
     required this.email,
-    required this.registerAs,
+    required this.role,
+    required this.selectedTeacher,
   });
 
   factory User.fromMap(Map<String, dynamic> map) {
@@ -19,7 +21,8 @@ class User {
       name: map['name'] ?? "",
       password: map['password'] ?? "",
       email: map['email'] ?? "",
-      registerAs: map['registerAs'] ?? "",
+      role: map['role'] ?? "",
+      selectedTeacher: map['selectedTeacher'] ?? "",
     );
   }
 
@@ -29,7 +32,8 @@ class User {
       'name': name,
       'email': email,
       'password': password,
-      "registerAs": registerAs,
+      "role": role,
+      "selectedTeacher": selectedTeacher,
     };
   }
 }

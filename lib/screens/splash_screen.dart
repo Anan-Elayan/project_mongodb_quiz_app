@@ -2,10 +2,8 @@ import 'package:app/screens/login_screen.dart';
 import 'package:app/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../generated/l10n.dart';
-
 class SplashScreen extends StatefulWidget {
-  SplashScreen({super.key});
+  const SplashScreen({super.key});
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -19,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
         width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF00B4DB), Color(0xFF0083B0)],
+            colors: [Color(0xFF6DD5FA), Color(0xFF2980B9)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -33,56 +31,22 @@ class _SplashScreenState extends State<SplashScreen> {
               color: Colors.white,
             ),
             const SizedBox(height: 40),
-
-            // Language Selection Radio Buttons
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     Radio<Locale>(
-            //       value: const Locale('en'),
-            //       groupValue: _selectedLocale,
-            //       onChanged: (Locale? value) {
-            //         setState(() {
-            //           _selectedLocale = value!;
-            //         });
-            //         widget.setLocale(
-            //             _selectedLocale); // Update locale immediately
-            //       },
-            //       activeColor: Colors.white, // Set selected color to white
-            //     ),
-            //     const Text('English', style: TextStyle(color: Colors.white)),
-            //     Radio<Locale>(
-            //       value: const Locale('ar'),
-            //       groupValue: _selectedLocale,
-            //       onChanged: (Locale? value) {
-            //         setState(() {
-            //           _selectedLocale = value!;
-            //         });
-            //         widget.setLocale(
-            //             _selectedLocale); // Update locale immediately
-            //       },
-            //       activeColor: Colors.white, // Set selected color to white
-            //     ),
-            //     const Text('العربية', style: TextStyle(color: Colors.white)),
-            //   ],
-            // ),
             const Text(
               "Palestinians Questions",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 24,
                 fontFamily: 'Cairo',
+                fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(height: 40),
-
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LoginScreen(),
+                    builder: (context) => const LoginScreen(),
                   ),
                 );
               },
@@ -94,23 +58,23 @@ class _SplashScreenState extends State<SplashScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: Text(
-                S.of(context).login,
-                style: const TextStyle(
-                  color: Color(0xFF0083B0),
+              child: const Text(
+                'Login',
+                style: TextStyle(
+                  color: Color(0xFF2980B9),
                   fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-
             const SizedBox(height: 20),
-
-            // Register Button
             OutlinedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RegisterScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => const RegisterScreen(),
+                  ),
                 );
               },
               style: OutlinedButton.styleFrom(
@@ -121,11 +85,12 @@ class _SplashScreenState extends State<SplashScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: Text(
-                S.of(context).register,
-                style: const TextStyle(
+              child: const Text(
+                'Register',
+                style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

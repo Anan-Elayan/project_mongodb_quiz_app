@@ -61,6 +61,26 @@ class NetworkingHelper {
     }
   }
 
+  Future<List<dynamic>?> getDataAsList() async {
+    try {
+      Uri uri = Uri.parse(url);
+      http.Response response = await http.get(
+        uri,
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        print("Failed to load data: ${response.statusCode}");
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      print("Error during network request: $e");
+      throw Exception('Error during network request: $e');
+    }
+  }
+
   // String id
 // Function to send the DELETE request to the API
   Future<bool> deleteData(Map<String, dynamic> body) async {
