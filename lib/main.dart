@@ -13,27 +13,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // Locale _locale = const Locale('en');
-
-  // void _setLocale(Locale locale) {
-  //   setState(() {
-  //     _locale = locale;
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // localizationsDelegates: const [
-      //   S.delegate,
-      //   GlobalMaterialLocalizations.delegate,
-      //   GlobalWidgetsLocalizations.delegate,
-      //   GlobalCupertinoLocalizations.delegate,
-      // ],
-      // supportedLocales: S.delegate.supportedLocales,
-      // locale: _locale,
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
     );
   }
 }
+// todo handle the analytics based on the teacher(# students)

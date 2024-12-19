@@ -151,6 +151,7 @@ class Routing {
       };
       var response = await networkingHelper.postData(body);
       if (response["message"] == "Login successful") {
+        print(response);
         return response["userId"];
       }
     } catch (e) {
@@ -164,9 +165,7 @@ class Routing {
       String userId = await getUserIdFromPref();
       NetworkingHelper networkingHelper =
           NetworkingHelper("$apiUrl/users/getUserById");
-      Map<String, dynamic> body = {
-        "id": userId,
-      };
+      Map<String, dynamic> body = {"id": userId};
       var response = await networkingHelper.postData(body);
       if (response != null) {
         print("response is ${response}");
@@ -193,12 +192,8 @@ class Routing {
         "password": password,
       };
       var response = await networkingHelper.postData(body);
-      if (response != null) {
-        print("response is ${response}");
-      }
-      return true;
+      return response != null;
     } catch (e) {
-      print("error when update profile data ${e.toString()}");
       return false;
     }
   }

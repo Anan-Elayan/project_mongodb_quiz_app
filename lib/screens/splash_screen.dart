@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             const SizedBox(height: 40),
             const Text(
-              "Palestinians Questions",
+              "Quiz App",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
