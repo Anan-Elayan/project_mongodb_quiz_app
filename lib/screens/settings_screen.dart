@@ -1,5 +1,6 @@
 import 'package:app/route/route.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SettingScreen extends StatefulWidget {
   SettingScreen({super.key});
@@ -37,12 +38,20 @@ class _SettingScreenState extends State<SettingScreen> {
       bool success = await routing.updateUserProfile(name, email, password);
 
       if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile updated successfully')),
+        Fluttertoast.showToast(
+          msg: "Profile updated successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to update profile')),
+        Fluttertoast.showToast(
+          msg: "Failed to update profile",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
         );
       }
     }

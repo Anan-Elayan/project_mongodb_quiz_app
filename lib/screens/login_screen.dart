@@ -1,3 +1,4 @@
+import 'package:app/screens/quiz_page.dart';
 import 'package:app/screens/teachers_panel.dart'; // Import Teacher Panel screen
 import 'package:app/services/pref.dart';
 import 'package:flutter/material.dart';
@@ -46,16 +47,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (response['message'] == "Login successful") {
         String userId = response['user']['_id'];
-
         if (userId.isNotEmpty) {
-          await saveUserId(userId); // Ensure userId is stored
-          print("User ID stored in preferences: $userId");
-
-          // Navigate only after userId is stored
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => TeacherPanel()),
-          );
+          await saveUserId(userId);
+          if (response['user']['role'] == 'student') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => QuizPage()),
+            );
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => TeacherPanel()),
+            );
+          }
         } else {
           print("Failed to retrieve userId.");
         }
@@ -69,7 +73,6 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _loadSavedLoginInfo();
-    print("-------\${getUserIdFromPref().toString()}");
   }
 
   Future<void> _loadSavedLoginInfo() async {
@@ -77,7 +80,6 @@ class _LoginScreenState extends State<LoginScreen> {
     if (isLoggedIn == true) {
       String? savedEmail = await getEmail();
       String? savedPassword = await getPassword();
-
       if (savedEmail != null && savedPassword != null) {
         emailController.text = savedEmail;
         passwordController.text = savedPassword;

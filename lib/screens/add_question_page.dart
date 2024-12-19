@@ -1,5 +1,7 @@
 import 'package:app/route/route.dart';
+import 'package:app/services/pref.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class AddQuestionScreen extends StatefulWidget {
   @override
@@ -7,6 +9,8 @@ class AddQuestionScreen extends StatefulWidget {
 }
 
 class _AddQuestionScreenState extends State<AddQuestionScreen> {
+  int totalQuestions = 0;
+
   final _formKey = GlobalKey<FormState>();
   String questionText = "";
   String correctAnswer = "";
@@ -36,49 +40,52 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
   Future<void> submitQuestion() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      setState(
-        () {
-          isLoading = true;
-        },
-      );
+      setState(() {
+        isLoading = true;
+      });
 
       if (correctAnswer.isEmpty || !choices.contains(correctAnswer)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Please select the correct answer."),
-            backgroundColor: Colors.red,
-          ),
+        Fluttertoast.showToast(
+          msg: "Please select the correct answer.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
         );
-        setState(
-          () {
-            isLoading = false;
-          },
-        );
+        setState(() {
+          isLoading = false;
+        });
         return;
       }
 
       Routing routing = Routing();
-      var response = await routing.addQuestion(questionText, choices,
-          correctAnswer, int.parse(ratingController.text));
-
+      String id = await getUserIdFromPref();
+      var response = await routing.addQuestion(
+        questionText,
+        choices,
+        correctAnswer,
+        int.parse(ratingController.text),
+        id,
+      );
       setState(() {
         isLoading = false;
       });
-
       if (response != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Question added successfully!"),
-            backgroundColor: Colors.green,
-          ),
+        Fluttertoast.showToast(
+          msg: "Question added successfully!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
         );
-        Navigator.pop(context);
+        Navigator.pop(context, true);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Failed to add question."),
-            backgroundColor: Colors.red,
-          ),
+        Fluttertoast.showToast(
+          msg: "Failed to add question.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
         );
       }
     }

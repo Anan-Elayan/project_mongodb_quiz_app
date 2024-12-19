@@ -1,4 +1,6 @@
 import 'package:app/screens/settings_screen.dart';
+import 'package:app/screens/show_students_details.dart';
+import 'package:app/screens/teacher_questions_details.dart';
 import 'package:app/services/pref.dart';
 import 'package:flutter/material.dart';
 
@@ -13,11 +15,24 @@ class TeacherPanel extends StatefulWidget {
 
 class _TeacherPanelState extends State<TeacherPanel> {
   int totalStudents = 0;
+  int totalQuestions = 0;
 
   @override
   void initState() {
     super.initState();
-    fetchAnalyticsData();
+    setState(() {
+      fetchAnalyticsData();
+      getTotalQuestionsCount();
+    });
+  }
+
+  Future<void> getTotalQuestionsCount() async {
+    Routing routing = Routing();
+    String id = await getUserIdFromPref();
+    int count = await routing.getNumberOfQuestionByTeacher(id);
+    setState(() {
+      totalQuestions = count;
+    });
   }
 
   void fetchAnalyticsData() {
@@ -31,9 +46,7 @@ class _TeacherPanelState extends State<TeacherPanel> {
       routing.getAnalytics(userId).then((data) {
         if (data != null) {
           setState(() {
-            print(data);
             totalStudents = data['totalStudents'] ?? 0;
-            print(totalStudents);
           });
         } else {
           print("Failed to fetch analytics.");
@@ -112,55 +125,132 @@ class _TeacherPanelState extends State<TeacherPanel> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        elevation: 6,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 20,
-                            horizontal: 16,
-                          ),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFF6DD5FA), Color(0xFF2980B9)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ShowStudentsDetails(),
                             ),
+                          );
+                        },
+                        child: Card(
+                          shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.group,
-                                color: Colors.white,
-                                size: 40,
+                          elevation: 6,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 20,
+                              horizontal: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF6DD5FA), Color(0xFF2980B9)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
                               ),
-                              const SizedBox(width: 16),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Total Students',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.group,
+                                  color: Colors.white,
+                                  size: 40,
+                                ),
+                                const SizedBox(width: 16),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Total Students',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    "$totalStudents",
-                                    style: const TextStyle(
-                                      fontSize: 36,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      "$totalStudents",
+                                      style: const TextStyle(
+                                        fontSize: 36,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      InkWell(
+                        onTap: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const TeacherQuestionDetails()),
+                          );
+
+                          // Refresh the total questions count if any change occurred
+                          if (result == true) {
+                            getTotalQuestionsCount();
+                          }
+                        },
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          elevation: 6,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 20,
+                              horizontal: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF6DD5FA), Color(0xFF2980B9)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
                               ),
-                            ],
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.question_answer_rounded,
+                                  color: Colors.white,
+                                  size: 40,
+                                ),
+                                const SizedBox(width: 16),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'My Questions',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      "$totalQuestions",
+                                      style: const TextStyle(
+                                        fontSize: 36,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -184,13 +274,15 @@ class _TeacherPanelState extends State<TeacherPanel> {
                             backgroundColor: const Color(0xFF2980B9),
                             foregroundColor: Colors.white,
                           ),
-                          onPressed: () {
-                            Navigator.push(
+                          onPressed: () async {
+                            final result = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => AddQuestionScreen(),
-                              ),
+                                  builder: (_) => AddQuestionScreen()),
                             );
+                            if (result == true) {
+                              getTotalQuestionsCount();
+                            }
                           },
                         ),
                       ),
