@@ -1,4 +1,5 @@
 import 'package:app/screens/settings_screen.dart';
+import 'package:app/services/pref.dart';
 import 'package:flutter/material.dart';
 
 import '../constant/constant.dart';
@@ -19,14 +20,30 @@ class _TeacherPanelState extends State<TeacherPanel> {
     fetchAnalyticsData();
   }
 
-  void fetchAnalyticsData() async {
-    Routing routing = Routing();
-    var data = await routing.getAnalytics();
-    if (data != null) {
-      setState(() {
-        totalStudents = data['totalStudents'] ?? 0;
+  void fetchAnalyticsData() {
+    getUserIdFromPref().then((userId) {
+      if (userId.isEmpty) {
+        print("No user ID found. Cannot fetch analytics.");
+        return;
+      }
+
+      Routing routing = Routing();
+      routing.getAnalytics(userId).then((data) {
+        if (data != null) {
+          setState(() {
+            print(data);
+            totalStudents = data['totalStudents'] ?? 0;
+            print(totalStudents);
+          });
+        } else {
+          print("Failed to fetch analytics.");
+        }
+      }).catchError((e) {
+        print("Error fetching analytics: $e");
       });
-    }
+    }).catchError((e) {
+      print("Error fetching user ID from preferences: $e");
+    });
   }
 
   @override
@@ -78,7 +95,7 @@ class _TeacherPanelState extends State<TeacherPanel> {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: totalStudents == 0
+        child: totalStudents == ''
             ? const Center(child: CircularProgressIndicator())
             : Padding(
                 padding: const EdgeInsets.all(16.0),

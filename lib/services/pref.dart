@@ -40,9 +40,14 @@ Future<bool> getRememberMe() async {
   return pref.getBool('rememberMe') ?? false;
 }
 
-void saveUserId(String value) async {
+Future<void> saveUserId(String value) async {
   SharedPreferences pref = await SharedPreferences.getInstance();
-  pref.setString('userId', value);
+  await pref.setString('userId', value);
+}
+
+Future<void> removeUserId() async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  await pref.remove('userId');
 }
 
 Future<String> getUserIdFromPref() async {

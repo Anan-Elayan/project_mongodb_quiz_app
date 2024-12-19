@@ -1,4 +1,3 @@
-import 'package:app/screens/quiz_page.dart'; // Import Quiz page screen
 import 'package:app/screens/teachers_panel.dart'; // Import Teacher Panel screen
 import 'package:app/services/pref.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +26,8 @@ class _LoginScreenState extends State<LoginScreen> {
         msg: "Please fill in both email and password",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
         backgroundColor: Colors.black,
         textColor: Colors.white,
-        fontSize: 16.0,
       );
       return;
     }
@@ -43,48 +40,28 @@ class _LoginScreenState extends State<LoginScreen> {
         msg: response['message'],
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
         backgroundColor: Colors.black,
         textColor: Colors.white,
-        fontSize: 16.0,
       );
 
       if (response['message'] == "Login successful") {
-        print(response);
-        String registerAs = response['user']['role'];
-        if (registerAs == "student") {
+        String userId = response['user']['_id'];
+
+        if (userId.isNotEmpty) {
+          await saveUserId(userId); // Ensure userId is stored
+          print("User ID stored in preferences: $userId");
+
+          // Navigate only after userId is stored
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-              builder: (context) => QuizPage(),
-            ),
+            MaterialPageRoute(builder: (context) => TeacherPanel()),
           );
-        } else if (registerAs == "teacher") {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TeacherPanel(),
-            ),
-          );
-        }
-      }
-      if (saveData) {
-        String userId = await routing.getUserId(
-            emailController.text, passwordController.text);
-        if (userId != 0) {
-          saveUserId(userId);
         } else {
-          print(userId);
+          print("Failed to retrieve userId.");
         }
-
-        isLogin(true);
-        saveEmail(emailController.text);
-        savePassword(passwordController.text);
-      } else {
-        isLogin(false);
-        saveEmail('');
-        savePassword('');
       }
+    } else {
+      print("Login failed.");
     }
   }
 

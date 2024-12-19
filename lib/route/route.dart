@@ -84,13 +84,16 @@ class Routing {
     }
   }
 
-  Future<Map<String, dynamic>?> getAnalytics() async {
+  Future<Map<String, dynamic>?> getAnalytics(String id) async {
     try {
       NetworkingHelper networkingHelper =
           NetworkingHelper("$apiUrl/users/analytics");
-      var response = await networkingHelper.getData();
+      print("id = ${id}");
+      Map<String, dynamic> body = {"teacher_id": id};
+      var response = await networkingHelper.postData(body);
       if (response != null) {
         int totalStudents = response['totalStudents'] ?? 0;
+        print("resonse in analytics ${response}");
         return {'totalStudents': totalStudents};
       } else {
         return null;
