@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../screens/splash_screen.dart';
 
-const String apiUrl = 'http://192.168.88.7:3000';
-//10.0.2.2
+const String apiUrl = 'http://192.168.88.4:3000';
 
 void showLogoutConfirmationDialog(BuildContext context) {
   showDialog(

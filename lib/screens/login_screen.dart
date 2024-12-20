@@ -147,7 +147,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: emailController,
                       decoration: const InputDecoration(
                         hintText: "Email",
-                        prefixIcon: Icon(Icons.email, color: Color(0xFF2980B9)),
+                        prefixIcon: Icon(
+                          Icons.email,
+                          color: Color(0xFF2980B9),
+                        ),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.all(15),
                       ),
@@ -172,7 +175,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscureText: true,
                       decoration: const InputDecoration(
                         hintText: "Password",
-                        prefixIcon: Icon(Icons.lock, color: Color(0xFF2980B9)),
+                        prefixIcon: Icon(
+                          Icons.lock,
+                          color: Color(0xFF2980B9),
+                        ),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.all(15),
                       ),

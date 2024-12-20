@@ -249,6 +249,60 @@ class Routing {
     }
   }
 
+  Future<bool> updateQuestion(
+    String questionId,
+    String question,
+    List<String> choices,
+    String correctAnswer,
+    int questionRating,
+  ) async {
+    try {
+      NetworkingHelper networkingHelper =
+          NetworkingHelper("$apiUrl/questions/updateQuestion");
+      Map<String, dynamic> body = {
+        "questionId": questionId,
+        "question": question,
+        "choices": choices,
+        "correctAnswer": correctAnswer,
+        "questionRat": questionRating,
+      };
+      final response = await networkingHelper.postData(body);
+
+      if (response != null &&
+          response['message'] == 'Question updated successfully') {
+        print("Question updated: $response");
+        Fluttertoast.showToast(
+          msg: "Question updated successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+        return true;
+      } else {
+        print("Failed to update question");
+        Fluttertoast.showToast(
+          msg: "Failed to update question",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+        return false;
+      }
+    } catch (e) {
+      print("Exception in updating question: ${e.toString()}");
+      Fluttertoast.showToast(
+        msg: "Error: ${e.toString()}",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+      return false;
+    }
+  }
+
   Future<int> getNumberOfQuestionByTeacher(String teacherId) async {
     try {
       NetworkingHelper networkingHelper =
@@ -266,6 +320,35 @@ class Routing {
     } catch (e) {
       print("error");
       return 0;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getStudentsByTeacherId(
+      String teacherId) async {
+    try {
+      NetworkingHelper networkingHelper =
+          NetworkingHelper("$apiUrl/users/getStudentsByTeacherId");
+
+      // Request body
+      Map<String, dynamic> body = {
+        "teacher_id": teacherId,
+      };
+
+      // Send POST request
+      var response = await networkingHelper.postData(body);
+
+      // Check if response contains 'students'
+      if (response != null && response['students'] != null) {
+        // Return the list of students
+        return List<Map<String, dynamic>>.from(response['students']);
+      } else {
+        print("Invalid response format or null response");
+        return [];
+      }
+    } catch (e) {
+      print(
+          "Some issues occurred while getting students by teacher ID. ${e.toString()}");
+      return [];
     }
   }
 }

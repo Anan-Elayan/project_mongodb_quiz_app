@@ -29,6 +29,7 @@ class _TeacherPanelState extends State<TeacherPanel> {
   Future<void> getTotalQuestionsCount() async {
     Routing routing = Routing();
     String id = await getUserIdFromPref();
+    print('id is ${id}');
     int count = await routing.getNumberOfQuestionByTeacher(id);
     setState(() {
       totalQuestions = count;

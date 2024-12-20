@@ -72,6 +72,8 @@ class _TeacherQuestionDetailsState extends State<TeacherQuestionDetails> {
         TextEditingController(text: question['correctAnswer']);
     TextEditingController choicesController =
         TextEditingController(text: question['choices'].join(", "));
+    TextEditingController ratingController =
+        TextEditingController(text: question['questionRat'].toString());
 
     showDialog(
       context: context,
@@ -95,6 +97,11 @@ class _TeacherQuestionDetailsState extends State<TeacherQuestionDetails> {
                   decoration:
                       const InputDecoration(labelText: "Correct Answer"),
                 ),
+                TextField(
+                  controller: ratingController,
+                  decoration: const InputDecoration(labelText: "Answer Rating"),
+                  keyboardType: TextInputType.number,
+                ),
               ],
             ),
           ),
@@ -104,13 +111,43 @@ class _TeacherQuestionDetailsState extends State<TeacherQuestionDetails> {
               child: const Text("Cancel"),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                String newQuestion = questionController.text;
+                List<String> newChoices = choicesController.text
+                    .split(", ")
+                    .map((e) => e.trim())
+                    .toList();
+                String newCorrectAnswer = correctAnswerController.text;
+                int newRating = int.tryParse(ratingController.text) ?? 0;
+                routing.updateQuestion(question['_id'], newQuestion, newChoices,
+                    newCorrectAnswer, newRating);
                 setState(() {
                   question['question'] = questionController.text;
                   question['choices'] = choicesController.text.split(", ");
                   question['correctAnswer'] = correctAnswerController.text;
+                  question['questionRat'] = ratingController.text;
                 });
                 Navigator.pop(context);
+                if (newQuestion.isEmpty ||
+                    newChoices.length != 4 ||
+                    newCorrectAnswer.isEmpty) {
+                  Fluttertoast.showToast(
+                    msg:
+                        "Please provide all required fields with valid values.",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                  );
+                } else if (!newChoices.contains(newCorrectAnswer)) {
+                  Fluttertoast.showToast(
+                    msg: "The correct answer must be one of the choices.",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                  );
+                }
               },
               child: const Text("Save"),
             ),
