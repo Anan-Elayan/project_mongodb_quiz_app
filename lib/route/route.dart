@@ -342,4 +342,34 @@ class Routing {
       return [];
     }
   }
+
+  Future<List<Map<String, dynamic>>> fetchQuestions(String teacherId) async {
+    try {
+      NetworkingHelper networkingHelper =
+          NetworkingHelper("$apiUrl/questions/getQuestions");
+      Map<String, dynamic> body = {"teacherId": teacherId};
+
+      // Make a POST request to fetch questions
+      var response = await networkingHelper.postData(body);
+
+      if (response != null && response['questions'] != null) {
+        // Parse the questions from the response
+        List<Map<String, dynamic>> questions = List<Map<String, dynamic>>.from(
+          response['questions'].map((question) => {
+                "questionText": question['question'],
+                "choices": question['choices'],
+                "correctAnswer": question['correctAnswer'],
+                "questionRat": question['questionRat'],
+              }),
+        );
+        return questions;
+      } else {
+        print("No questions found or invalid response format.");
+        return [];
+      }
+    } catch (e) {
+      print("Error fetching questions: ${e.toString()}");
+      return [];
+    }
+  }
 }

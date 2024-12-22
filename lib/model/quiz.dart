@@ -1,11 +1,7 @@
-import 'dart:convert';
-
-import 'package:app/constant/constant.dart';
 import 'package:app/route/route.dart';
 import 'package:app/services/pref.dart';
-import 'package:http/http.dart' as http;
 
-class QuizBrain {
+class Quiz {
   List<Map<String, dynamic>> _questionBank = [];
   int _currentQuestionIndex = 0;
   bool isLoading = false;
@@ -13,43 +9,23 @@ class QuizBrain {
   int? totalRating;
   int? totalQuestions;
 
-  Future<void> fetchQuestions(String teacherId) async {
+  Future<void> loadQuestions(String teacherId) async {
+    Routing routing = Routing();
     try {
-      isLoading = true;
+      List<Map<String, dynamic>> questions =
+          await routing.fetchQuestions(teacherId);
 
-      var url = Uri.parse("$apiUrl/questions/getQuestions");
-      var response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({"teacherId": teacherId}),
-      );
-
-      if (response.statusCode == 200) {
-        var responseData = json.decode(response.body);
-
-        if (responseData['questions'] != null) {
-          _questionBank = (responseData['questions'] as List).map((question) {
-            return {
-              "questionText": question['question'],
-              "choices": question['choices'],
-              "correctAnswer": question['correctAnswer'],
-              "questionRat": question['questionRat'],
-            };
-          }).toList();
-        } else {
-          _questionBank = [];
-          errorMessage = "No questions found for the specified teacher.";
+      if (questions.isNotEmpty) {
+        _questionBank = questions; // Populate the question bank
+        print("Questions fetched successfully:");
+        for (var question in questions) {
+          print("Question: ${question['questionText']}");
         }
       } else {
-        throw Exception("Failed to load questions: ${response.statusCode}");
+        print("No questions found for teacher ID: $teacherId");
       }
     } catch (e) {
-      errorMessage = "Error fetching questions: $e";
-      print(errorMessage);
-    } finally {
-      isLoading = false;
+      print("Error loading questions: ${e.toString()}");
     }
   }
 
@@ -74,7 +50,7 @@ class QuizBrain {
     Routing routing = Routing();
     String teacherId = await getTeacherIdWhenUserLoginFromPref();
     totalQuestions = await routing.getTotalQuestionCount(teacherId);
-    print("total rating is ${totalQuestions}");
+    print("total questionCount is ${totalQuestions}");
     return totalQuestions;
   }
 

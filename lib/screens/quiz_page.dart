@@ -1,4 +1,4 @@
-import 'package:app/quiz_brain.dart';
+import 'package:app/model/quiz.dart';
 import 'package:app/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -14,42 +14,48 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  QuizBrain quizBrain = QuizBrain();
+  Quiz quiz = Quiz();
   List<Icon> scoreKeeper = [];
   bool isLoading = true;
   int? selectedChoice;
   int mark = 0;
+  int totalQuestionsCount = 0;
   int numberQuestion = 1;
-  Locale _locale = const Locale('en');
-
-  void _setLocale(Locale locale) {
-    setState(() {
-      _locale = locale;
-    });
-  }
 
   @override
   void initState() {
     super.initState();
     loadQuestions();
-    print(quizBrain.getQuestionRating());
+    loadQuestionsCount();
+    ();
+    print(quiz.getQuestionRating());
   }
 
   Future<void> loadQuestions() async {
-    String teacherId = await getTeacherIdWhenUserLoginFromPref();
-    await quizBrain.fetchQuestions(teacherId);
-    await quizBrain.getTotalQuestionsCount();
+    setState(() => isLoading = true); // Set loading state to true
+    String teacherId =
+        await getTeacherIdWhenUserLoginFromPref(); // Get teacher ID
+    await quiz.loadQuestions(teacherId); // Wait for questions to load
+    print("Questions loaded for teacher ID: $teacherId"); // Debug log
+    setState(() => isLoading = false); // Set loading state to false
+  }
+
+  Future<void> loadQuestionsCount() async {
+    setState(() => isLoading = true); // Set loading state to true
+    int? count =
+        await quiz.getTotalQuestionsCount(); // Fetch total questions count
     setState(() {
-      isLoading = false;
+      totalQuestionsCount = count ?? 0; // Update state variable
+      isLoading = false; // Set loading state to false
     });
   }
 
   void checkAnswer() {
-    String correctAnswer = quizBrain.getCorrectAnswer();
-    String selectedChoiceText = quizBrain.getChoices()[selectedChoice ?? -1];
+    String correctAnswer = quiz.getCorrectAnswer();
+    String selectedChoiceText = quiz.getChoices()[selectedChoice ?? -1];
 
     setState(() {
-      if (quizBrain.isFinished()) {
+      if (quiz.isFinished()) {
         if (selectedChoiceText == correctAnswer) {
           scoreKeeper.add(
             const Icon(
@@ -57,7 +63,7 @@ class _QuizPageState extends State<QuizPage> {
               color: Colors.green,
             ),
           );
-          mark += quizBrain.getQuestionRating();
+          mark += quiz.getQuestionRating();
         } else {
           scoreKeeper.add(
             const Icon(
@@ -70,10 +76,10 @@ class _QuizPageState extends State<QuizPage> {
           context: context,
           title: 'Finish',
           desc:
-              '${"You have reached the end of the quiz."}\nTotal marks: ${mark} / ${quizBrain.getTotalRating()}',
+              '${"You have reached the end of the quiz."}\nTotal marks: ${mark} / ${quiz.getTotalRating()}',
         ).show();
 
-        quizBrain.reset();
+        quiz.reset();
         scoreKeeper.clear();
         mark = 0;
         numberQuestion = 1;
@@ -85,7 +91,7 @@ class _QuizPageState extends State<QuizPage> {
               color: Colors.green,
             ),
           );
-          mark += quizBrain.getQuestionRating();
+          mark += quiz.getQuestionRating();
         } else {
           scoreKeeper.add(
             const Icon(
@@ -94,7 +100,7 @@ class _QuizPageState extends State<QuizPage> {
             ),
           );
         }
-        quizBrain.nextQuestion();
+        quiz.nextQuestion();
         numberQuestion++;
         selectedChoice = null;
       }
@@ -155,7 +161,7 @@ class _QuizPageState extends State<QuizPage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "النقاط ${mark}/${quizBrain.getTotalRating()!}",
+                          "النقاط ${mark}/${quiz.getTotalRating()!}",
                           style: const TextStyle(
                             color: Colors.white,
                           ),
@@ -164,7 +170,7 @@ class _QuizPageState extends State<QuizPage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "السؤال $numberQuestion من ${quizBrain.totalQuestions ?? 0}",
+                          "السؤال $numberQuestion من ${totalQuestionsCount ?? 0}",
                           style: const TextStyle(
                             color: Colors.white,
                           ),
@@ -174,7 +180,7 @@ class _QuizPageState extends State<QuizPage> {
                         padding: const EdgeInsets.all(20.0),
                         child: Center(
                           child: Text(
-                            quizBrain.getQuestionText(),
+                            quiz.getQuestionText(),
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 24.0,
@@ -199,7 +205,7 @@ class _QuizPageState extends State<QuizPage> {
                         mainAxisSpacing: 15,
                         childAspectRatio: 3,
                       ),
-                      itemCount: quizBrain.getChoices().length,
+                      itemCount: quiz.getChoices().length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
@@ -222,7 +228,7 @@ class _QuizPageState extends State<QuizPage> {
                             ),
                             child: RadioListTile<int>(
                               title: Text(
-                                quizBrain.getChoices()[index],
+                                quiz.getChoices()[index],
                                 style: TextStyle(
                                   color: selectedChoice == index
                                       ? Colors.white
