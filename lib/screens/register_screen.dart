@@ -114,7 +114,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         return;
       }
 
-      // Display the response message
       Fluttertoast.showToast(
         msg: response['message'] ?? "Unexpected response from server",
         toastLength: Toast.LENGTH_SHORT,
@@ -127,7 +126,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         fontSize: 16.0,
       );
 
-      // Navigate to LoginScreen on success
       if (response['message'] == "User registered successfully!") {
         Navigator.pushReplacement(
           context,
@@ -135,7 +133,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
       }
     } catch (e) {
-      // Handle exceptions
       Fluttertoast.showToast(
         msg: "Error: $e",
         toastLength: Toast.LENGTH_SHORT,
@@ -343,7 +340,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       onChanged: (selectedValue) {
         setState(() {
           _userRole = selectedValue;
-          _selectedTeacher = null; // Reset teacher selection if role changes
+          _selectedTeacher = null;
         });
       },
     );

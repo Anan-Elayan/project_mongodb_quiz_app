@@ -47,8 +47,29 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (response['message'] == "Login successful") {
         String userId = response['user']['_id'];
+
         if (userId.isNotEmpty) {
           await saveUserId(userId);
+
+          // Save teacher ID if the role is student
+          if (response['user']['role'] == 'student') {
+            String teacherId = response['user']['teacher_id'];
+            await saveTeacherIdWhenUserLogin(teacherId);
+          }
+
+          // Check if "Remember Me" is checked and save updated credentials
+          if (saveData) {
+            await saveEmail(email);
+            await savePassword(password);
+            await isLogin(true); // Update login status
+          } else {
+            // Clear saved data if "Remember Me" is unchecked
+            await saveEmail('');
+            await savePassword('');
+            await isLogin(false);
+          }
+
+          // Navigate to the appropriate screen
           if (response['user']['role'] == 'student') {
             Navigator.pushReplacement(
               context,
@@ -76,16 +97,16 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _loadSavedLoginInfo() async {
-    bool? isLoggedIn = await getLoginStatus();
-    if (isLoggedIn == true) {
+    bool? isRemembered = await getRememberMe();
+    if (isRemembered) {
+      setState(() {
+        saveData = true;
+      });
       String? savedEmail = await getEmail();
       String? savedPassword = await getPassword();
       if (savedEmail != null && savedPassword != null) {
         emailController.text = savedEmail;
         passwordController.text = savedPassword;
-        setState(() {
-          saveData = true;
-        });
       }
     }
   }
@@ -189,10 +210,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Checkbox(
                         value: saveData,
-                        onChanged: (value) {
+                        onChanged: (value) async {
                           setState(() {
                             saveData = value!;
                           });
+                          await saveRememberMe(saveData);
                         },
                       ),
                       const Text("Remember me"),

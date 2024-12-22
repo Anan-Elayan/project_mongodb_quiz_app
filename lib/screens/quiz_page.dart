@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../constant/constant.dart';
+import '../services/pref.dart';
 
 class QuizPage extends StatefulWidget {
   const QuizPage({Key? key}) : super(key: key);
@@ -35,7 +36,8 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   Future<void> loadQuestions() async {
-    await quizBrain.fetchQuestions();
+    String teacherId = await getTeacherIdWhenUserLoginFromPref();
+    await quizBrain.fetchQuestions(teacherId);
     await quizBrain.getTotalQuestionsCount();
     setState(() {
       isLoading = false;
@@ -129,9 +131,9 @@ class _QuizPageState extends State<QuizPage> {
           },
         ),
         backgroundColor: Colors.black12.withOpacity(0.1),
-        title: Text(
+        title: const Text(
           'Quiz App',
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.white,
             fontSize: 25,
           ),

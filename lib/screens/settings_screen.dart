@@ -13,9 +13,9 @@ class _SettingScreenState extends State<SettingScreen> {
   Map<String, dynamic>? profileData = {};
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _passwordVisible = false;
 
   Future<void> loadData() async {
@@ -169,7 +169,6 @@ class _SettingScreenState extends State<SettingScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      // Password Input with toggle visibility
                       TextFormField(
                         controller: _passwordController,
                         obscureText: !_passwordVisible,
@@ -200,9 +199,11 @@ class _SettingScreenState extends State<SettingScreen> {
                               color: Colors.grey[700],
                             ),
                             onPressed: () {
-                              setState(() {
-                                _passwordVisible = !_passwordVisible;
-                              });
+                              setState(
+                                () {
+                                  _passwordVisible = !_passwordVisible;
+                                },
+                              );
                             },
                           ),
                         ),

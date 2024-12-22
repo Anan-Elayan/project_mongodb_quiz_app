@@ -129,11 +129,14 @@ class Routing {
     }
   }
 
-  Future<int> getTotalQuestionCount() async {
+  Future<int> getTotalQuestionCount(String teacherId) async {
     try {
       NetworkingHelper networkingHelper =
           NetworkingHelper("$apiUrl/questions/getQuestionCount");
-      var response = await networkingHelper.getData();
+      Map<String, dynamic> body = {
+        "teacherId": teacherId,
+      };
+      var response = await networkingHelper.postData(body);
       if (response != null && response.containsKey('totalQuestions')) {
         return response['totalQuestions'];
       } else {
@@ -267,10 +270,8 @@ class Routing {
         "questionRat": questionRating,
       };
       final response = await networkingHelper.postData(body);
-
       if (response != null &&
           response['message'] == 'Question updated successfully') {
-        print("Question updated: $response");
         Fluttertoast.showToast(
           msg: "Question updated successfully",
           toastLength: Toast.LENGTH_SHORT,
@@ -280,7 +281,6 @@ class Routing {
         );
         return true;
       } else {
-        print("Failed to update question");
         Fluttertoast.showToast(
           msg: "Failed to update question",
           toastLength: Toast.LENGTH_SHORT,
@@ -291,7 +291,6 @@ class Routing {
         return false;
       }
     } catch (e) {
-      print("Exception in updating question: ${e.toString()}");
       Fluttertoast.showToast(
         msg: "Error: ${e.toString()}",
         toastLength: Toast.LENGTH_SHORT,
@@ -314,7 +313,6 @@ class Routing {
       if (response != null && response.containsKey('totalQuestions')) {
         return response['totalQuestions'];
       } else {
-        print("Invalid response format or null response");
         return 0;
       }
     } catch (e) {
@@ -328,18 +326,11 @@ class Routing {
     try {
       NetworkingHelper networkingHelper =
           NetworkingHelper("$apiUrl/users/getStudentsByTeacherId");
-
-      // Request body
       Map<String, dynamic> body = {
         "teacher_id": teacherId,
       };
-
-      // Send POST request
       var response = await networkingHelper.postData(body);
-
-      // Check if response contains 'students'
       if (response != null && response['students'] != null) {
-        // Return the list of students
         return List<Map<String, dynamic>>.from(response['students']);
       } else {
         print("Invalid response format or null response");

@@ -1,16 +1,16 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-void saveEmail(String email) async {
+Future<void> saveEmail(String email) async {
   SharedPreferences pref = await SharedPreferences.getInstance();
   await pref.setString('email', email);
 }
 
-void savePassword(String password) async {
+Future<void> savePassword(String password) async {
   SharedPreferences pref = await SharedPreferences.getInstance();
   pref.setString('password', password);
 }
 
-void isLogin(bool isLogin) async {
+Future<void> isLogin(bool isLogin) async {
   SharedPreferences pref = await SharedPreferences.getInstance();
   pref.setBool('isLogin', isLogin);
 }
@@ -30,7 +30,7 @@ Future<bool?> getLoginStatus() async {
   return pref.getBool('isLogin');
 }
 
-void saveRememberMe(bool value) async {
+Future<void> saveRememberMe(bool value) async {
   SharedPreferences pref = await SharedPreferences.getInstance();
   pref.setBool('rememberMe', value);
 }
@@ -53,4 +53,19 @@ Future<void> removeUserId() async {
 Future<String> getUserIdFromPref() async {
   SharedPreferences pref = await SharedPreferences.getInstance();
   return pref.getString('userId') ?? '';
+}
+
+Future<void> saveTeacherIdWhenUserLogin(String value) async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  await pref.setString('teacherId', value);
+}
+
+Future<void> removeTeacherIdWhenUserLogin() async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  await pref.remove('teacherId');
+}
+
+Future<String> getTeacherIdWhenUserLoginFromPref() async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  return pref.getString('teacherId') ?? '';
 }

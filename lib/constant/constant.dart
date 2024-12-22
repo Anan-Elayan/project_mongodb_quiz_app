@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../screens/splash_screen.dart';
 
-const String apiUrl = 'http://192.168.88.4:3000';
+const String apiUrl = 'http://192.168.88.3:3000';
 
 void showLogoutConfirmationDialog(BuildContext context) {
   showDialog(
@@ -20,9 +20,14 @@ void showLogoutConfirmationDialog(BuildContext context) {
           ),
           TextButton(
             child: const Text("Yes"),
-            onPressed: () {
-              removeUserId().then((_) {
-                Navigator.of(context).pop();
+            onPressed: () async {
+              try {
+                // Remove stored user data
+                await removeUserId();
+                await removeTeacherIdWhenUserLogin();
+
+                // Navigate to SplashScreen
+                Navigator.of(context).pop(); // Close the dialog
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -30,9 +35,9 @@ void showLogoutConfirmationDialog(BuildContext context) {
                   ),
                   (Route<dynamic> route) => false,
                 );
-              }).catchError((e) {
+              } catch (e) {
                 print("Error during logout: $e");
-              });
+              }
             },
           ),
         ],
