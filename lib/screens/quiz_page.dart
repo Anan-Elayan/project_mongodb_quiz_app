@@ -1,3 +1,4 @@
+// quiz_page.dart
 import 'package:app/model/quiz.dart';
 import 'package:app/screens/login_screen.dart';
 import 'package:app/screens/settings_screen.dart';
@@ -28,88 +29,88 @@ class _QuizPageState extends State<QuizPage> {
     super.initState();
     loadQuestions();
     loadQuestionsCount();
-    ();
-    print(quiz.getQuestionRating());
   }
 
   Future<void> loadQuestions() async {
-    setState(() => isLoading = true); // Set loading state to true
-    String teacherId =
-        await getTeacherIdWhenUserLoginFromPref(); // Get teacher ID
-    await quiz.loadQuestions(teacherId); // Wait for questions to load
-    print("Questions loaded for teacher ID: $teacherId"); // Debug log
-    setState(() => isLoading = false); // Set loading state to false
+    setState(() => isLoading = true);
+    String teacherId = await getTeacherIdWhenUserLoginFromPref();
+    await quiz.loadQuestions(teacherId);
+    setState(() => isLoading = false);
   }
 
   Future<void> loadQuestionsCount() async {
-    setState(() => isLoading = true); // Set loading state to true
-    int? count =
-        await quiz.getTotalQuestionsCount(); // Fetch total questions count
+    setState(() => isLoading = true);
+    int? count = await quiz.getTotalQuestionsCount();
     setState(() {
-      totalQuestionsCount = count ?? 0; // Update state variable
-      isLoading = false; // Set loading state to false
+      totalQuestionsCount = count ?? 0;
+      isLoading = false;
     });
   }
 
-  void checkAnswer() {
+  void _markAnswer(bool isCorrect) {
+    if (isCorrect) {
+      scoreKeeper.add(const Icon(Icons.check, color: Colors.green));
+      mark += quiz.getQuestionRating();
+    } else {
+      scoreKeeper.add(const Icon(Icons.close, color: Colors.red));
+    }
+  }
+
+  void checkAnswer() async {
+    if (selectedChoice == null) return;
+
+    String selectedChoiceText = quiz.getChoices()[selectedChoice!];
     String correctAnswer = quiz.getCorrectAnswer();
-    String selectedChoiceText = quiz.getChoices()[selectedChoice ?? -1];
 
     setState(() {
+      quiz.updateQuestionBank(
+        quiz.currentQuestionIndex,
+        selectedChoiceText,
+        selectedChoiceText == correctAnswer,
+      );
+
       if (quiz.isFinished()) {
-        if (selectedChoiceText == correctAnswer) {
-          scoreKeeper.add(
-            const Icon(
-              Icons.check,
-              color: Colors.green,
-            ),
-          );
-          mark += quiz.getQuestionRating();
-        } else {
-          scoreKeeper.add(
-            const Icon(
-              Icons.close,
-              color: Colors.red,
-            ),
-          );
-        }
+        _markAnswer(selectedChoiceText == correctAnswer);
+
         Alert(
           style: AlertStyle(),
-          closeFunction: () {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const LoginScreen(),
-              ),
-              (Route<dynamic> route) => false,
-            );
-          },
           context: context,
           title: 'Finish',
           desc:
-              '${"You have reached the end of the quiz."}\nTotal marks: ${mark} / ${quiz.getTotalRating()}',
+              'You have reached the end of the quiz.\nTotal marks: $mark / ${quiz.getTotalRating()}',
+          buttons: [
+            DialogButton(
+              child: const Text(
+                "Close",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () async {
+                await quiz.submitTestResult(
+                  studentId: await getUserIdFromPref(),
+                  teacherId: await getTeacherIdWhenUserLoginFromPref(),
+                  mark: mark,
+                );
+                // Clear the quiz data
+                quiz.reset();
+                scoreKeeper.clear();
+                mark = 0;
+                numberQuestion = 1;
+
+                // Navigate to the login page and clear the navigation stack
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          LoginScreen()), // Replace `LoginPage` with your login page widget
+                  (route) =>
+                      false, // This removes all previous routes from the stack
+                );
+              },
+            ),
+          ],
         ).show();
-        quiz.reset();
-        scoreKeeper.clear();
-        mark = 0;
-        numberQuestion = 1;
       } else {
-        if (selectedChoiceText == correctAnswer) {
-          scoreKeeper.add(
-            const Icon(
-              Icons.check,
-              color: Colors.green,
-            ),
-          );
-          mark += quiz.getQuestionRating();
-        } else {
-          scoreKeeper.add(
-            const Icon(
-              Icons.close,
-              color: Colors.red,
-            ),
-          );
-        }
+        _markAnswer(selectedChoiceText == correctAnswer);
         quiz.nextQuestion();
         numberQuestion++;
         selectedChoice = null;
@@ -210,7 +211,7 @@ class _QuizPageState extends State<QuizPage> {
                     child: GridView.builder(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, // Two choices per row
+                        crossAxisCount: 2,
                         crossAxisSpacing: 15,
                         mainAxisSpacing: 15,
                         childAspectRatio: 3,

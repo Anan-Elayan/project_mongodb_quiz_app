@@ -356,6 +356,7 @@ class Routing {
         // Parse the questions from the response
         List<Map<String, dynamic>> questions = List<Map<String, dynamic>>.from(
           response['questions'].map((question) => {
+                "questionId": question['_id'],
                 "questionText": question['question'],
                 "choices": question['choices'],
                 "correctAnswer": question['correctAnswer'],
@@ -370,6 +371,53 @@ class Routing {
     } catch (e) {
       print("Error fetching questions: ${e.toString()}");
       return [];
+    }
+  }
+
+  Future<bool> insertTestResult({
+    required String studentId,
+    required String teacherId,
+    required List<Map<String, dynamic>> questions,
+    required int totalScore,
+  }) async {
+    try {
+      // Debugging: Log the `questions` array
+      print("Preparing to send test result...");
+      print("Questions: $questions");
+
+      // Validate the questions array
+      for (var question in questions) {
+        if (question['questionId'] == null || question['answer'] == null) {
+          print("Error: Missing required fields in question: $question");
+          return false; // Return early if data is invalid
+        }
+      }
+
+      NetworkingHelper networkingHelper =
+          NetworkingHelper("$apiUrl/test_results/addTestResult");
+
+      // Prepare the request body
+      Map<String, dynamic> body = {
+        "studentId": studentId,
+        "teacherId": teacherId,
+        "questions": questions,
+        "totalScore": totalScore,
+      };
+
+      // Send the POST request
+      var response = await networkingHelper.postData(body);
+
+      if (response != null &&
+          response['message'] == 'Test result added successfully') {
+        print("Test result inserted successfully.");
+        return true;
+      } else {
+        print("Failed to insert test result. Response: ${response.toString()}");
+        return false;
+      }
+    } catch (e) {
+      print("Error inserting test result: ${e.toString()}");
+      return false;
     }
   }
 }

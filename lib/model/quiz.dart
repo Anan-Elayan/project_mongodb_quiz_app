@@ -9,6 +9,17 @@ class Quiz {
   int? totalRating;
   int? totalQuestions;
 
+  List<Map<String, dynamic>> get questionBank => _questionBank;
+  int get currentQuestionIndex => _currentQuestionIndex;
+
+  void updateQuestionBank(
+      int index, String selectedChoiceText, bool isCorrect) {
+    if (index < _questionBank.length) {
+      _questionBank[index]["selectedChoiceText"] = selectedChoiceText;
+      _questionBank[index]["isCorrect"] = isCorrect;
+    }
+  }
+
   Future<void> loadQuestions(String teacherId) async {
     Routing routing = Routing();
     try {
@@ -16,8 +27,8 @@ class Quiz {
           await routing.fetchQuestions(teacherId);
 
       if (questions.isNotEmpty) {
-        _questionBank = questions; // Populate the question bank
-        print("Questions fetched successfully:");
+        _questionBank = questions;
+        print("Questions fetched successfully: ${_questionBank[0]}");
         for (var question in questions) {
           print("Question: ${question['questionText']}");
         }
@@ -43,6 +54,38 @@ class Quiz {
       }
     }
     return totalRating;
+  }
+
+  Future<bool> submitTestResult({
+    required String studentId,
+    required String teacherId,
+    required int mark,
+  }) async {
+    print('studentId${studentId}');
+    print('teacherId${teacherId}');
+    Routing routing = Routing();
+    print('_questionBank${_questionBank}');
+
+    // Prepare the questions list with required fields
+    List<Map<String, dynamic>> questions = _questionBank.map((question) {
+      return {
+        "questionId": question["questionId"],
+        "answer": question["selectedChoiceText"] ?? '',
+        "isCorrect": question["isCorrect"] ?? false,
+        "rating": question["questionRat"],
+      };
+    }).toList();
+
+    // Debugging: Print the prepared `questions` array
+    print("Questions prepared for submission: $questions");
+
+    // Send the test result to the server
+    return await routing.insertTestResult(
+      studentId: studentId,
+      teacherId: teacherId,
+      questions: questions,
+      totalScore: mark,
+    );
   }
 
   Future<int?> getTotalQuestionsCount() async {
