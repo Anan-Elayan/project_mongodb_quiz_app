@@ -1,4 +1,3 @@
-// quiz_page.dart
 import 'package:app/model/quiz.dart';
 import 'package:app/screens/login_screen.dart';
 import 'package:app/screens/settings_screen.dart';
@@ -73,7 +72,7 @@ class _QuizPageState extends State<QuizPage> {
         _markAnswer(selectedChoiceText == correctAnswer);
 
         Alert(
-          style: AlertStyle(),
+          style: const AlertStyle(),
           context: context,
           title: 'Finish',
           desc:
@@ -82,7 +81,10 @@ class _QuizPageState extends State<QuizPage> {
             DialogButton(
               child: const Text(
                 "Close",
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
               ),
               onPressed: () async {
                 await quiz.submitTestResult(
@@ -90,20 +92,16 @@ class _QuizPageState extends State<QuizPage> {
                   teacherId: await getTeacherIdWhenUserLoginFromPref(),
                   mark: mark,
                 );
-                // Clear the quiz data
                 quiz.reset();
                 scoreKeeper.clear();
                 mark = 0;
                 numberQuestion = 1;
-
-                // Navigate to the login page and clear the navigation stack
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          LoginScreen()), // Replace `LoginPage` with your login page widget
-                  (route) =>
-                      false, // This removes all previous routes from the stack
+                    builder: (context) => LoginScreen(),
+                  ),
+                  (route) => false,
                 );
               },
             ),
@@ -220,9 +218,11 @@ class _QuizPageState extends State<QuizPage> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            setState(() {
-                              selectedChoice = index;
-                            });
+                            setState(
+                              () {
+                                selectedChoice = index;
+                              },
+                            );
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -279,7 +279,9 @@ class _QuizPageState extends State<QuizPage> {
                       child: Text(
                         "Submit Answer",
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

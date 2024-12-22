@@ -1,5 +1,7 @@
 import 'package:app/route/route.dart';
 import 'package:app/services/pref.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Quiz {
   List<Map<String, dynamic>> _questionBank = [];
@@ -13,7 +15,10 @@ class Quiz {
   int get currentQuestionIndex => _currentQuestionIndex;
 
   void updateQuestionBank(
-      int index, String selectedChoiceText, bool isCorrect) {
+    int index,
+    String selectedChoiceText,
+    bool isCorrect,
+  ) {
     if (index < _questionBank.length) {
       _questionBank[index]["selectedChoiceText"] = selectedChoiceText;
       _questionBank[index]["isCorrect"] = isCorrect;
@@ -23,20 +28,29 @@ class Quiz {
   Future<void> loadQuestions(String teacherId) async {
     Routing routing = Routing();
     try {
-      List<Map<String, dynamic>> questions =
-          await routing.fetchQuestions(teacherId);
+      List<Map<String, dynamic>> questions = await routing.fetchQuestions(
+        teacherId,
+      );
 
       if (questions.isNotEmpty) {
         _questionBank = questions;
-        print("Questions fetched successfully: ${_questionBank[0]}");
-        for (var question in questions) {
-          print("Question: ${question['questionText']}");
-        }
       } else {
-        print("No questions found for teacher ID: $teacherId");
+        Fluttertoast.showToast(
+          msg: "No questions found for teacher",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+        );
       }
     } catch (e) {
-      print("Error loading questions: ${e.toString()}");
+      Fluttertoast.showToast(
+        msg: "Error loading questions:",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
     }
   }
 
@@ -61,12 +75,7 @@ class Quiz {
     required String teacherId,
     required int mark,
   }) async {
-    print('studentId${studentId}');
-    print('teacherId${teacherId}');
     Routing routing = Routing();
-    print('_questionBank${_questionBank}');
-
-    // Prepare the questions list with required fields
     List<Map<String, dynamic>> questions = _questionBank.map((question) {
       return {
         "questionId": question["questionId"],
@@ -75,11 +84,6 @@ class Quiz {
         "rating": question["questionRat"],
       };
     }).toList();
-
-    // Debugging: Print the prepared `questions` array
-    print("Questions prepared for submission: $questions");
-
-    // Send the test result to the server
     return await routing.insertTestResult(
       studentId: studentId,
       teacherId: teacherId,

@@ -181,7 +181,13 @@ class _TeacherQuestionDetailsState extends State<TeacherQuestionDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Teacher Question Details"),
+        backgroundColor: const Color(0xFF2980B9),
+        title: const Text(
+          "Teacher Questions Details",
+          style: TextStyle(
+            fontSize: 19,
+          ),
+        ),
       ),
       body: questions.isEmpty
           ? const Center(
@@ -198,59 +204,83 @@ class _TeacherQuestionDetailsState extends State<TeacherQuestionDetails> {
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   elevation: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "Question: ${question['question']}",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFFEAF6FF), Color(0xFFB2E0F7)],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Question: ${question['question']}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16.0,
+                                    color: Colors.black,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.blue),
-                              onPressed: () {
-                                editQuestion(context, question);
-                              },
-                            ),
-                          ],
-                        ),
-                        const Divider(),
-                        Text(
-                          "Choices: ${question['choices'].join(", ")}",
-                          style: const TextStyle(fontSize: 14.0),
-                        ),
-                        const SizedBox(height: 8.0),
-                        Text(
-                          "Correct Answer: ${question['correctAnswer']}",
-                          style: const TextStyle(fontSize: 14.0),
-                        ),
-                        const SizedBox(height: 8.0),
-                        Text(
-                          "Rating: ${question['questionRat']}",
-                          style: const TextStyle(fontSize: 14.0),
-                        ),
-                        const SizedBox(height: 16.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                deleteQuestion(question['_id']);
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
+                              IconButton(
+                                icon:
+                                    const Icon(Icons.edit, color: Colors.black),
+                                onPressed: () {
+                                  editQuestion(context, question);
+                                },
+                              ),
+                            ],
+                          ),
+                          const Divider(color: Colors.white54),
+                          Text(
+                            "Choices: ${question['choices'].join(", ")}",
+                            style: const TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 8.0),
+                          Text(
+                            "Correct Answer: ${question['correctAnswer']}",
+                            style: const TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 8.0),
+                          Text(
+                            "Rating: ${question['questionRat']}",
+                            style: const TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 16.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.delete,
+                                    color: Colors.redAccent),
+                                onPressed: () {
+                                  deleteQuestion(question['_id']);
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );

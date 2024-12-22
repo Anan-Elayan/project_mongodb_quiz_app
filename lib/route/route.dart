@@ -322,7 +322,8 @@ class Routing {
   }
 
   Future<List<Map<String, dynamic>>> getStudentsByTeacherId(
-      String teacherId) async {
+    String teacherId,
+  ) async {
     try {
       NetworkingHelper networkingHelper =
           NetworkingHelper("$apiUrl/users/getStudentsByTeacherId");
@@ -384,29 +385,21 @@ class Routing {
       // Debugging: Log the `questions` array
       print("Preparing to send test result...");
       print("Questions: $questions");
-
-      // Validate the questions array
       for (var question in questions) {
         if (question['questionId'] == null || question['answer'] == null) {
           print("Error: Missing required fields in question: $question");
-          return false; // Return early if data is invalid
+          return false;
         }
       }
-
       NetworkingHelper networkingHelper =
           NetworkingHelper("$apiUrl/test_results/addTestResult");
-
-      // Prepare the request body
       Map<String, dynamic> body = {
         "studentId": studentId,
         "teacherId": teacherId,
         "questions": questions,
         "totalScore": totalScore,
       };
-
-      // Send the POST request
       var response = await networkingHelper.postData(body);
-
       if (response != null &&
           response['message'] == 'Test result added successfully') {
         print("Test result inserted successfully.");
@@ -418,6 +411,75 @@ class Routing {
     } catch (e) {
       print("Error inserting test result: ${e.toString()}");
       return false;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>?> fetchTestResultsByTeacherId({
+    required String teacherId,
+  }) async {
+    try {
+      NetworkingHelper networkingHelper = NetworkingHelper(
+        "$apiUrl/test_results/getTestResultsByTeacherId",
+      );
+      Map<String, dynamic> body = {
+        "teacherId": teacherId,
+      };
+      var response = await networkingHelper.postData(body);
+      if (response != null &&
+          response['message'] == 'Test results fetched successfully' &&
+          response['testResults'] != null) {
+        print("Test results fetched successfully.");
+        return List<Map<String, dynamic>>.from(response['testResults']);
+      } else {
+        print("Failed to fetch test results. Response: ${response.toString()}");
+        return null;
+      }
+    } catch (e) {
+      print("Error fetching test results: ${e.toString()}");
+      return null;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>?> fetchTestResultsForEachStudent({
+    required String studentId,
+    required String teacherId,
+  }) async {
+    try {
+      List<Map<String, dynamic>>? allTestResults =
+          await fetchTestResultsByTeacherId(teacherId: teacherId);
+      if (allTestResults == null || allTestResults.isEmpty) {
+        print("No test results found for teacherId: $teacherId");
+        return null;
+      }
+      List<Map<String, dynamic>> filteredResults = allTestResults
+          .where((testResult) => testResult['studentId'] == studentId)
+          .toList();
+
+      if (filteredResults.isNotEmpty) {
+        print("Filtered test results for studentId: $studentId");
+      } else {
+        print("No test results found for studentId: $studentId");
+      }
+      return filteredResults;
+    } catch (e) {
+      print("Error filtering test results: ${e.toString()}");
+      return null;
+    }
+  }
+
+  Future<String> getQuestionTextById(String questionId) async {
+    try {
+      NetworkingHelper networkingHelper =
+          NetworkingHelper("$apiUrl/questions/getQuestionsById");
+      Map<String, dynamic> body = {
+        "questionId": questionId,
+      };
+      var response = await networkingHelper.postData(body);
+      print("response is :${response}");
+      return response['question'];
+    } catch (e) {
+      print("Some Error");
+      return "not return any thing";
     }
   }
 }
