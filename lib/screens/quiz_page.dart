@@ -1,4 +1,5 @@
 import 'package:app/model/quiz.dart';
+import 'package:app/screens/login_screen.dart';
 import 'package:app/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -73,12 +74,21 @@ class _QuizPageState extends State<QuizPage> {
           );
         }
         Alert(
+          style: AlertStyle(),
+          closeFunction: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LoginScreen(),
+              ),
+              (Route<dynamic> route) => false,
+            );
+          },
           context: context,
           title: 'Finish',
           desc:
               '${"You have reached the end of the quiz."}\nTotal marks: ${mark} / ${quiz.getTotalRating()}',
         ).show();
-
         quiz.reset();
         scoreKeeper.clear();
         mark = 0;
@@ -161,7 +171,7 @@ class _QuizPageState extends State<QuizPage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "النقاط ${mark}/${quiz.getTotalRating()!}",
+                          "النقاط $mark/${quiz.getTotalRating()!}",
                           style: const TextStyle(
                             color: Colors.white,
                           ),
@@ -170,7 +180,7 @@ class _QuizPageState extends State<QuizPage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "السؤال $numberQuestion من ${totalQuestionsCount ?? 0}",
+                          "السؤال $numberQuestion من $totalQuestionsCount",
                           style: const TextStyle(
                             color: Colors.white,
                           ),
@@ -258,7 +268,7 @@ class _QuizPageState extends State<QuizPage> {
                   child: ElevatedButton(
                     onPressed: selectedChoice != null ? checkAnswer : null,
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blueAccent,
+                      backgroundColor: Colors.blueAccent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
