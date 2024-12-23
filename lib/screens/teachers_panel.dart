@@ -18,6 +18,7 @@ class _TeacherPanelState extends State<TeacherPanel> {
   int totalQuestions = 0;
   Routing routing = Routing();
   bool isQuizClosed = false;
+  String sortOrder = "asc";
 
   @override
   void initState() {
@@ -32,7 +33,8 @@ class _TeacherPanelState extends State<TeacherPanel> {
   Future<void> toggleQuizStatus() async {
     try {
       String id = await getUserIdFromPref();
-      List fetchedQuestions = await routing.getQuestionByTeacherId(id);
+      List fetchedQuestions =
+          await routing.getQuestionByTeacherId(id, sortOrder);
       bool allCloseQuizFalse =
           fetchedQuestions.every((q) => q['closeQuiz'] == false);
 
@@ -58,20 +60,17 @@ class _TeacherPanelState extends State<TeacherPanel> {
 
   Future<void> checkQuizStatus() async {
     String id = await getUserIdFromPref();
-    List fetchedQuestions = await routing.getQuestionByTeacherId(id);
-
-    // Determine the initial state based on the fetched questions
+    List fetchedQuestions = await routing.getQuestionByTeacherId(id, sortOrder);
     bool allCloseQuizFalse =
         fetchedQuestions.every((q) => q['closeQuiz'] == false);
 
     setState(() {
-      isQuizClosed = !allCloseQuizFalse; // If all are false, quiz is open
+      isQuizClosed = !allCloseQuizFalse;
     });
   }
 
   Future<void> getTotalQuestionsCount() async {
     String id = await getUserIdFromPref();
-    print('id is ${id}');
     int count = await routing.getNumberOfQuestionByTeacher(id);
     setState(() {
       totalQuestions = count;

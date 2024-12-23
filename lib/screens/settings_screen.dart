@@ -67,6 +67,7 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFF2980B9),
         elevation: 0,
         centerTitle: true,
         title: const Text(
@@ -74,15 +75,6 @@ class _SettingScreenState extends State<SettingScreen> {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-          ),
-        ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF6DD5FA), Color(0xFF2980B9)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
           ),
         ),
       ),

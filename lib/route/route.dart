@@ -204,12 +204,14 @@ class Routing {
   }
 
   //----------------------------------------------------------------------------
-  Future<List<dynamic>> getQuestionByTeacherId(String teacherId) async {
+  Future<List<dynamic>> getQuestionByTeacherId(
+      String teacherId, String sortOrder) async {
     try {
       NetworkingHelper networkingHelper =
           NetworkingHelper("$apiUrl/questions/getQuestionsByTeacherId");
       Map<String, dynamic> body = {
         "teacherId": teacherId,
+        "sortOrder": sortOrder, // Pass sortOrder here
       };
       final response = await networkingHelper.postData(body);
       if (response is List) {
@@ -431,6 +433,7 @@ class Routing {
           response['message'] == 'Test results fetched successfully' &&
           response['testResults'] != null) {
         print("Test results fetched successfully.");
+        print("Test results fetched successfully. ${response['testResult']}");
         return List<Map<String, dynamic>>.from(response['testResults']);
       } else {
         print("Failed to fetch test results. Response: ${response.toString()}");
@@ -459,6 +462,7 @@ class Routing {
 
       if (filteredResults.isNotEmpty) {
         print("Filtered test results for studentId: $studentId");
+        print("list is ${filteredResults}");
       } else {
         print("No test results found for studentId: $studentId");
       }

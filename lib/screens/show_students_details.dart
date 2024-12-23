@@ -35,6 +35,7 @@ class _ShowStudentsDetailsState extends State<ShowStudentsDetails> {
       if (teacherId.isNotEmpty) {
         List<Map<String, dynamic>> fetchedStudents =
             await routing.getStudentsByTeacherId(teacherId);
+        print("fetsh student list is ${fetchedStudents}");
         setState(() {
           students = fetchedStudents;
           isLoading = false;
