@@ -33,36 +33,25 @@ class _TeacherPanelState extends State<TeacherPanel> {
     try {
       String id = await getUserIdFromPref();
       List fetchedQuestions = await routing.getQuestionByTeacherId(id);
-
-      // Check if all `closeQuiz` are false
       bool allCloseQuizFalse =
           fetchedQuestions.every((q) => q['closeQuiz'] == false);
 
-      // Update the local state optimistically
       setState(() {
-        isQuizClosed = !allCloseQuizFalse; // Toggle the button state
+        isQuizClosed = !allCloseQuizFalse;
       });
 
-      // Update the `closeQuiz` value based on the current state
       List<Map> updatedQuestions = fetchedQuestions.map((q) {
         return {
           ...q,
-          'closeQuiz': allCloseQuizFalse ? true : false, // Toggle closeQuiz
+          'closeQuiz': allCloseQuizFalse ? true : false,
         };
       }).toList();
       setState(() {});
-
-      // Send the updated questions to the backend
       await routing.updateQuestionsWhenCloseQuiz(id, updatedQuestions);
       setState(() {});
-
-      print("Updated Questions: $updatedQuestions");
     } catch (e) {
-      print("Error toggling quiz status: $e");
-
-      // Revert the state in case of an error
       setState(() {
-        isQuizClosed = !isQuizClosed; // Revert to the previous state
+        isQuizClosed = !isQuizClosed;
       });
     }
   }
