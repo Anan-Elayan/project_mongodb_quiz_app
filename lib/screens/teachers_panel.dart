@@ -16,6 +16,8 @@ class TeacherPanel extends StatefulWidget {
 class _TeacherPanelState extends State<TeacherPanel> {
   int totalStudents = 0;
   int totalQuestions = 0;
+  Routing routing = Routing();
+  bool isQuizClosed = false;
 
   @override
   void initState() {
@@ -23,11 +25,62 @@ class _TeacherPanelState extends State<TeacherPanel> {
     setState(() {
       fetchAnalyticsData();
       getTotalQuestionsCount();
+      checkQuizStatus();
+    });
+  }
+
+  Future<void> toggleQuizStatus() async {
+    try {
+      String id = await getUserIdFromPref();
+      List fetchedQuestions = await routing.getQuestionByTeacherId(id);
+
+      // Check if all `closeQuiz` are false
+      bool allCloseQuizFalse =
+          fetchedQuestions.every((q) => q['closeQuiz'] == false);
+
+      // Update the local state optimistically
+      setState(() {
+        isQuizClosed = !allCloseQuizFalse; // Toggle the button state
+      });
+
+      // Update the `closeQuiz` value based on the current state
+      List<Map> updatedQuestions = fetchedQuestions.map((q) {
+        return {
+          ...q,
+          'closeQuiz': allCloseQuizFalse ? true : false, // Toggle closeQuiz
+        };
+      }).toList();
+      setState(() {});
+
+      // Send the updated questions to the backend
+      await routing.updateQuestionsWhenCloseQuiz(id, updatedQuestions);
+      setState(() {});
+
+      print("Updated Questions: $updatedQuestions");
+    } catch (e) {
+      print("Error toggling quiz status: $e");
+
+      // Revert the state in case of an error
+      setState(() {
+        isQuizClosed = !isQuizClosed; // Revert to the previous state
+      });
+    }
+  }
+
+  Future<void> checkQuizStatus() async {
+    String id = await getUserIdFromPref();
+    List fetchedQuestions = await routing.getQuestionByTeacherId(id);
+
+    // Determine the initial state based on the fetched questions
+    bool allCloseQuizFalse =
+        fetchedQuestions.every((q) => q['closeQuiz'] == false);
+
+    setState(() {
+      isQuizClosed = !allCloseQuizFalse; // If all are false, quiz is open
     });
   }
 
   Future<void> getTotalQuestionsCount() async {
-    Routing routing = Routing();
     String id = await getUserIdFromPref();
     print('id is ${id}');
     int count = await routing.getNumberOfQuestionByTeacher(id);
@@ -42,8 +95,6 @@ class _TeacherPanelState extends State<TeacherPanel> {
         print("No user ID found. Cannot fetch analytics.");
         return;
       }
-
-      Routing routing = Routing();
       routing.getAnalytics(userId).then((data) {
         if (data != null) {
           setState(() {
@@ -197,7 +248,6 @@ class _TeacherPanelState extends State<TeacherPanel> {
                                 builder: (_) => const TeacherQuestionDetails()),
                           );
 
-                          // Refresh the total questions count if any change occurred
                           if (result == true) {
                             getTotalQuestionsCount();
                           }
@@ -285,6 +335,31 @@ class _TeacherPanelState extends State<TeacherPanel> {
                               getTotalQuestionsCount();
                             }
                           },
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      Center(
+                        child: ElevatedButton.icon(
+                          icon: isQuizClosed
+                              ? Icon(Icons.lock_open_outlined, size: 24)
+                              : Icon(Icons.close, size: 24),
+                          label: Text(
+                            isQuizClosed ? 'Open Quiz' : 'Close Quiz',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 32,
+                              vertical: 16,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 6,
+                            backgroundColor: const Color(0xFF2980B9),
+                            foregroundColor: Colors.white,
+                          ),
+                          onPressed: toggleQuizStatus,
                         ),
                       ),
                     ],

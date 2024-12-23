@@ -170,7 +170,9 @@ class _QuizPageState extends State<QuizPage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "النقاط $mark/${quiz.getTotalRating()!}",
+                          quiz.getCloseQuiz == false
+                              ? "النقاط: $mark/${quiz.getTotalRating()!}"
+                              : "",
                           style: const TextStyle(
                             color: Colors.white,
                           ),
@@ -179,7 +181,9 @@ class _QuizPageState extends State<QuizPage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "السؤال $numberQuestion من $totalQuestionsCount",
+                          quiz.getCloseQuiz == false
+                              ? "السؤال $numberQuestion من $totalQuestionsCount"
+                              : "",
                           style: const TextStyle(
                             color: Colors.white,
                           ),
@@ -189,7 +193,9 @@ class _QuizPageState extends State<QuizPage> {
                         padding: const EdgeInsets.all(20.0),
                         child: Center(
                           child: Text(
-                            quiz.getQuestionText(),
+                            quiz.getCloseQuiz == false
+                                ? quiz.getQuestionText()
+                                : "NO Question Found!",
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 24.0,

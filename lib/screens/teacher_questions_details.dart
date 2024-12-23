@@ -161,6 +161,7 @@ class _TeacherQuestionDetailsState extends State<TeacherQuestionDetails> {
     try {
       final String id = await getUserIdFromPref();
       final fetchedQuestions = await routing.getQuestionByTeacherId(id);
+      print("fetch questions :${fetchedQuestions}");
       setState(() {
         questions = fetchedQuestions;
       });

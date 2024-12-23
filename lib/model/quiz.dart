@@ -7,12 +7,14 @@ class Quiz {
   List<Map<String, dynamic>> _questionBank = [];
   int _currentQuestionIndex = 0;
   bool isLoading = false;
+  bool closeQuiz = false;
   String errorMessage = '';
   int? totalRating;
   int? totalQuestions;
 
   List<Map<String, dynamic>> get questionBank => _questionBank;
   int get currentQuestionIndex => _currentQuestionIndex;
+  bool get getCloseQuiz => closeQuiz;
 
   void updateQuestionBank(
     int index,
@@ -28,13 +30,24 @@ class Quiz {
   Future<void> loadQuestions(String teacherId) async {
     Routing routing = Routing();
     try {
-      List<Map<String, dynamic>> questions = await routing.fetchQuestions(
-        teacherId,
-      );
+      List<Map<String, dynamic>> questions =
+          await routing.fetchQuestionsForUsers(teacherId);
 
-      if (questions.isNotEmpty) {
-        _questionBank = questions;
+      for (var q in questions) {
+        if (q['closeQuiz'] == false) {
+          closeQuiz = false;
+          break;
+        } else {
+          closeQuiz = true;
+        }
+      }
+
+      if (closeQuiz == false) {
+        _questionBank =
+            questions.where((q) => q['closeQuiz'] == false).toList();
+        print("Filtered question bank: ${_questionBank}");
       } else {
+        closeQuiz = true;
         Fluttertoast.showToast(
           msg: "No questions found for teacher",
           toastLength: Toast.LENGTH_SHORT,
@@ -45,7 +58,7 @@ class Quiz {
       }
     } catch (e) {
       Fluttertoast.showToast(
-        msg: "Error loading questions:",
+        msg: "Error loading questions: $e",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.red,

@@ -344,7 +344,8 @@ class Routing {
     }
   }
 
-  Future<List<Map<String, dynamic>>> fetchQuestions(String teacherId) async {
+  Future<List<Map<String, dynamic>>> fetchQuestionsForUsers(
+      String teacherId) async {
     try {
       NetworkingHelper networkingHelper =
           NetworkingHelper("$apiUrl/questions/getQuestions");
@@ -362,6 +363,7 @@ class Routing {
                 "choices": question['choices'],
                 "correctAnswer": question['correctAnswer'],
                 "questionRat": question['questionRat'],
+                "closeQuiz": question['closeQuiz'],
               }),
         );
         return questions;
@@ -480,6 +482,54 @@ class Routing {
     } catch (e) {
       print("Some Error");
       return "not return any thing";
+    }
+  }
+
+  Future<void> updateQuestionsWhenCloseQuiz(
+      String teacherId, List<Map<dynamic, dynamic>> updatedQuestions) async {
+    try {
+      NetworkingHelper networkingHelper =
+          NetworkingHelper("$apiUrl/questions/closeQuiz");
+      Map<String, dynamic> body = {
+        "teacherId": teacherId,
+        "questions": updatedQuestions,
+      };
+
+      final response = await networkingHelper.postData(body);
+
+      if (response != null && response['message'] != null) {
+        Fluttertoast.showToast(
+          msg: "Quiz Updated Successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+
+        if (response.containsKey('updatedQuestions')) {
+          // Optionally handle the updated questions
+          List<Map<String, dynamic>> updatedList =
+              List<Map<String, dynamic>>.from(response['updatedQuestions']);
+          print("Updated Questions: $updatedList");
+        }
+      } else {
+        Fluttertoast.showToast(
+          msg: "Failed to update questions",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+      }
+    } catch (e) {
+      print("Error updating questions: ${e.toString()}");
+      Fluttertoast.showToast(
+        msg: "Error updating questions",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
     }
   }
 }
