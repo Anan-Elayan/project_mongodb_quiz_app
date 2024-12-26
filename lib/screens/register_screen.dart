@@ -153,7 +153,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           "Register",
           style: TextStyle(color: Colors.white),
         ),
-        centerTitle: true,
+        centerTitle: false,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(

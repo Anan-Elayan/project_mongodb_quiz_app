@@ -184,7 +184,16 @@ class _TeacherQuestionDetailsState extends State<TeacherQuestionDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2980B9),
+        centerTitle: false,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF6DD5FA), Color(0xFF2980B9)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         title: const Text(
           "Teacher Questions Details",
           style: TextStyle(
@@ -192,209 +201,219 @@ class _TeacherQuestionDetailsState extends State<TeacherQuestionDetails> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16.0),
-            margin:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Sort Questions by Rating",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            sortOrder = "asc";
-                            loadQuestions();
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            Radio<String>(
-                              value: "asc",
-                              groupValue: sortOrder,
-                              activeColor: Colors.blueAccent,
-                              onChanged: (value) {
-                                setState(() {
-                                  sortOrder = value!;
-                                  loadQuestions();
-                                });
-                              },
-                            ),
-                            const Text(
-                              "Ascending",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            sortOrder = "desc";
-                            loadQuestions();
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            Radio<String>(
-                              value: "desc",
-                              groupValue: sortOrder,
-                              activeColor: Colors.blueAccent,
-                              onChanged: (value) {
-                                setState(() {
-                                  sortOrder = value!;
-                                  loadQuestions();
-                                });
-                              },
-                            ),
-                            const Text(
-                              "Descending",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+      body: Container(
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFEAF6FF), Color(0xFFB2E0F7)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
-          Expanded(
-            child: questions.isEmpty
-                ? const Center(
-                    child: Text(
-                    "No questions found",
-                  ))
-                : ListView.builder(
-                    itemCount: questions.length,
-                    itemBuilder: (context, index) {
-                      final question = questions[index];
-                      return Card(
-                        margin: const EdgeInsets.all(8.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Sort Questions by Rating",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              sortOrder = "asc";
+                              loadQuestions();
+                            });
+                          },
+                          child: Row(
+                            children: [
+                              Radio<String>(
+                                value: "asc",
+                                groupValue: sortOrder,
+                                activeColor: Colors.blueAccent,
+                                onChanged: (value) {
+                                  setState(() {
+                                    sortOrder = value!;
+                                    loadQuestions();
+                                  });
+                                },
+                              ),
+                              const Text(
+                                "Ascending",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        elevation: 4,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFFEAF6FF), Color(0xFFB2E0F7)],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                            ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              sortOrder = "desc";
+                              loadQuestions();
+                            });
+                          },
+                          child: Row(
+                            children: [
+                              Radio<String>(
+                                value: "desc",
+                                groupValue: sortOrder,
+                                activeColor: Colors.blueAccent,
+                                onChanged: (value) {
+                                  setState(() {
+                                    sortOrder = value!;
+                                    loadQuestions();
+                                  });
+                                },
+                              ),
+                              const Text(
+                                "Descending",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: questions.isEmpty
+                  ? const Center(
+                      child: Text(
+                      "No questions found",
+                    ))
+                  : ListView.builder(
+                      itemCount: questions.length,
+                      itemBuilder: (context, index) {
+                        final question = questions[index];
+                        return Card(
+                          margin: const EdgeInsets.all(8.0),
+                          shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12.0),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        "Question: ${question['question']}",
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16.0,
-                                          color: Colors.black,
+                          elevation: 4,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFEAF6FF), Color(0xFFB2E0F7)],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          "Question: ${question['question']}",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16.0,
+                                            color: Colors.black,
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.edit,
-                                          color: Colors.black),
-                                      onPressed: () {
-                                        editQuestion(context, question);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                const Divider(color: Colors.white54),
-                                Text(
-                                  "Choices: ${question['choices'].join(", ")}",
-                                  style: const TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 8.0),
-                                Text(
-                                  "Correct Answer: ${question['correctAnswer']}",
-                                  style: const TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 8.0),
-                                Text(
-                                  "Rating: ${question['questionRat']}",
-                                  style: const TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 16.0),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.delete,
-                                          color: Colors.redAccent),
-                                      onPressed: () {
-                                        deleteQuestion(question['_id']);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                      IconButton(
+                                        icon: const Icon(Icons.edit,
+                                            color: Colors.black),
+                                        onPressed: () {
+                                          editQuestion(context, question);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  const Divider(color: Colors.black),
+                                  Text(
+                                    "Choices: ${question['choices'].join(", ")}",
+                                    style: const TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 8.0),
+                                  Text(
+                                    "Correct Answer: ${question['correctAnswer']}",
+                                    style: const TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 8.0),
+                                  Text(
+                                    "Rating: ${question['questionRat']}",
+                                    style: const TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 16.0),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.delete,
+                                            color: Colors.redAccent),
+                                        onPressed: () {
+                                          deleteQuestion(question['_id']);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-          ),
-        ],
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

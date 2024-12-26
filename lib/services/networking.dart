@@ -81,13 +81,9 @@ class NetworkingHelper {
     }
   }
 
-  // String id
-// Function to send the DELETE request to the API
   Future<bool> deleteData(Map<String, dynamic> body) async {
     Uri uri = Uri.parse(url);
-
     try {
-      // Send the DELETE request with the body
       http.Response response = await http.delete(
         uri,
         headers: {"Content-Type": "application/json"},

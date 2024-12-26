@@ -69,7 +69,7 @@ class _QuizPageState extends State<QuizPage> {
       );
 
       if (quiz.isFinished()) {
-        _markAnswer(selectedChoiceText == correctAnswer);
+        // _markAnswer(selectedChoiceText == correctAnswer);
 
         Alert(
           style: const AlertStyle(),
@@ -108,7 +108,7 @@ class _QuizPageState extends State<QuizPage> {
           ],
         ).show();
       } else {
-        _markAnswer(selectedChoiceText == correctAnswer);
+        // _markAnswer(selectedChoiceText == correctAnswer);
         quiz.nextQuestion();
         numberQuestion++;
         selectedChoice = null;

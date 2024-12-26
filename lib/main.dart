@@ -21,4 +21,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-// todo handle the analytics based on the teacher(# students)

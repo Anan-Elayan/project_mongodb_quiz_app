@@ -111,7 +111,15 @@ class _TeacherPanelState extends State<TeacherPanel> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xFF2980B9),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF6DD5FA), Color(0xFF2980B9)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         elevation: 5,
         actions: [
           IconButton(

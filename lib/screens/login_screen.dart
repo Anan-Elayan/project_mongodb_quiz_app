@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
           "Login",
           style: TextStyle(color: Colors.white),
         ),
-        centerTitle: true,
+        centerTitle: false,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
