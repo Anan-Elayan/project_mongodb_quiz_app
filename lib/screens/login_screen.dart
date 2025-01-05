@@ -1,3 +1,4 @@
+import 'package:app/constant/custom_text_fields.dart';
 import 'package:app/screens/quiz_page.dart';
 import 'package:app/screens/teachers_panel.dart'; // Import Teacher Panel screen
 import 'package:app/services/pref.dart';
@@ -16,77 +17,74 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   bool saveData = false;
 
   Future<void> _login() async {
-    String email = emailController.text.trim();
-    String password = passwordController.text.trim();
-
-    if (email.isEmpty || password.isEmpty) {
-      Fluttertoast.showToast(
-        msg: "Please fill in both email and password",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-      );
-      return;
-    }
-
-    Routing routing = Routing();
-    var response = await routing.login(email, password);
-
-    if (response != null) {
-      Fluttertoast.showToast(
-        msg: response['message'],
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-      );
-
-      if (response['message'] == "Login successful") {
-        String userId = response['user']['_id'];
-
-        if (userId.isNotEmpty) {
-          await saveUserId(userId);
-
-          // Save teacher ID if the role is student
-          if (response['user']['role'] == 'student') {
-            String teacherId = response['user']['teacher_id'];
-            await saveTeacherIdWhenUserLogin(teacherId);
-          }
-
-          // Check if "Remember Me" is checked and save updated credentials
-          if (saveData) {
-            await saveEmail(email);
-            await savePassword(password);
-            await isLogin(true); // Update login status
+    if (_formKey.currentState!.validate()) {
+      String email = emailController.text.trim();
+      String password = passwordController.text.trim();
+      Routing routing = Routing();
+      var response = await routing.login(email, password);
+      if (response != null) {
+        if (response['message'] == "Login successful") {
+          Fluttertoast.showToast(
+            msg: "${response['message']} 😊",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+          );
+          String userId = response['user']['_id'];
+          if (userId.isNotEmpty) {
+            await saveUserId(userId);
+            if (response['user']['role'] == 'student') {
+              String teacherId = response['user']['teacher_id'];
+              await saveTeacherIdWhenUserLogin(teacherId);
+            }
+            if (saveData) {
+              await saveEmail(email);
+              await savePassword(password);
+              await isLogin(true);
+            } else {
+              await saveEmail('');
+              await savePassword('');
+              await isLogin(false);
+            }
+            if (response['user']['role'] == 'student') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => QuizPage()),
+              );
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => TeacherPanel()),
+              );
+            }
           } else {
-            // Clear saved data if "Remember Me" is unchecked
-            await saveEmail('');
-            await savePassword('');
-            await isLogin(false);
-          }
-
-          // Navigate to the appropriate screen
-          if (response['user']['role'] == 'student') {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => QuizPage()),
-            );
-          } else {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => TeacherPanel()),
-            );
+            print("Failed to retrieve userId.");
           }
         } else {
-          print("Failed to retrieve userId.");
+          Fluttertoast.showToast(
+            msg: "${response['message']} 😒",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+          );
         }
+      } else {
+        print("some error");
       }
     } else {
-      print("Login failed.");
+      Fluttertoast.showToast(
+        msg: "Please check the input data in field! ❌",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
     }
   }
 
@@ -143,104 +141,91 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Center(
             child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.login,
-                    size: 80,
-                    color: Color(0xFF2980B9),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 10,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
+              child: Form(
+                // Wrap the form with the Form widget
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.login,
+                      size: 80,
+                      color: Color(0xFF2980B9),
                     ),
-                    child: TextFormField(
+                    const SizedBox(height: 20),
+                    CustomTextFields(
+                      txtLabel: "Email",
+                      backgroundColor: Colors.white,
                       controller: emailController,
-                      decoration: const InputDecoration(
-                        hintText: "Email",
-                        prefixIcon: Icon(
-                          Icons.email,
-                          color: Color(0xFF2980B9),
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(15),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
+                      txtPrefixIcon: Icons.email,
+                      prefixIconColor: const Color(0xFF2980B9),
+                      isVisibleContent: false,
+                      validate: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the Email';
+                        } else if (!RegExp(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+                            .hasMatch(value)) {
+                          return 'Please enter a valid Email';
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 10,
-                          offset: Offset(0, 4),
+                    const SizedBox(height: 20),
+                    CustomTextFields(
+                      txtLabel: "Password",
+                      backgroundColor: Colors.white,
+                      controller: passwordController,
+                      txtPrefixIcon: Icons.lock,
+                      prefixIconColor: const Color(0xFF2980B9),
+                      isVisibleContent: true,
+                      suffixIconColor: const Color(0xFF2980B9),
+                      txtSuffixIcon: Icons.insert_emoticon_rounded,
+                      validate: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the Password';
+                        } else if (value.length < 6) {
+                          return 'Password must be at least 6 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: saveData,
+                          onChanged: (value) async {
+                            setState(() {
+                              saveData = value!;
+                            });
+                            await saveRememberMe(saveData);
+                          },
                         ),
+                        const Text("Remember me"),
                       ],
                     ),
-                    child: TextFormField(
-                      controller: passwordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        hintText: "Password",
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: Color(0xFF2980B9),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _login,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 15,
+                          horizontal: 50,
                         ),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 5,
+                        backgroundColor: const Color(0xFF2980B9),
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text(
+                        "Login",
+                        style: TextStyle(fontSize: 18),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: saveData,
-                        onChanged: (value) async {
-                          setState(() {
-                            saveData = value!;
-                          });
-                          await saveRememberMe(saveData);
-                        },
-                      ),
-                      const Text("Remember me"),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _login,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 15,
-                        horizontal: 50,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 5,
-                      backgroundColor: const Color(0xFF2980B9),
-                      foregroundColor: Colors.white,
-                    ),
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

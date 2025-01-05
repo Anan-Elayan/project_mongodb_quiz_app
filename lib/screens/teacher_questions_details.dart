@@ -80,27 +80,71 @@ class _TeacherQuestionDetailsState extends State<TeacherQuestionDetails> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Edit Question"),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: const Color(0xFFEAF6FF),
+          title: const Text(
+            "Edit Question",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
           content: SingleChildScrollView(
             child: Column(
               children: [
                 TextField(
                   controller: questionController,
-                  decoration: const InputDecoration(labelText: "Question"),
+                  decoration: const InputDecoration(
+                    labelText: "Question",
+                    labelStyle: TextStyle(color: Colors.black87),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
+                  ),
                 ),
+                const SizedBox(height: 18),
                 TextField(
                   controller: choicesController,
                   decoration: const InputDecoration(
-                      labelText: "Choices (comma-separated)"),
+                    labelText: "Choices (comma-separated)",
+                    labelStyle: TextStyle(color: Colors.black87),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
+                  ),
                 ),
+                const SizedBox(height: 18),
                 TextField(
                   controller: correctAnswerController,
-                  decoration:
-                      const InputDecoration(labelText: "Correct Answer"),
+                  decoration: const InputDecoration(
+                    labelText: "Correct Answer",
+                    labelStyle: TextStyle(color: Colors.black87),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
+                  ),
                 ),
+                const SizedBox(height: 18),
                 TextField(
                   controller: ratingController,
-                  decoration: const InputDecoration(labelText: "Answer Rating"),
+                  decoration: const InputDecoration(
+                    labelText: "Answer Rating",
+                    labelStyle: TextStyle(color: Colors.black87),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
+                  ),
                   keyboardType: TextInputType.number,
                 ),
               ],
@@ -109,7 +153,10 @@ class _TeacherQuestionDetailsState extends State<TeacherQuestionDetails> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
+              child: const Text(
+                "Cancel",
+                style: TextStyle(color: Colors.black87),
+              ),
             ),
             TextButton(
               onPressed: () async {
@@ -150,7 +197,10 @@ class _TeacherQuestionDetailsState extends State<TeacherQuestionDetails> {
                   );
                 }
               },
-              child: const Text("Save"),
+              child: const Text(
+                "Save",
+                style: TextStyle(color: Colors.black87),
+              ),
             ),
           ],
         );

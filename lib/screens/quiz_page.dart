@@ -195,7 +195,7 @@ class _QuizPageState extends State<QuizPage> {
                           child: Text(
                             quiz.getCloseQuiz == false
                                 ? quiz.getQuestionText()
-                                : "NO Question Found!",
+                                : "NO Questions Found! 😒",
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 24.0,
