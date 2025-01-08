@@ -1,4 +1,3 @@
-import 'package:app/screens/settings_screen.dart';
 import 'package:app/screens/show_students_details.dart';
 import 'package:app/screens/teacher_questions_details.dart';
 import 'package:app/services/pref.dart';
@@ -122,20 +121,20 @@ class _TeacherPanelState extends State<TeacherPanel> {
         ),
         elevation: 5,
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SettingScreen(),
-                ),
-              );
-            },
-            icon: const Icon(
-              Icons.settings,
-              color: Colors.white,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => SettingScreen(),
+          //       ),
+          //     );
+          //   },
+          //   icon: const Icon(
+          //     Icons.settings,
+          //     color: Colors.white,
+          //   ),
+          // ),
         ],
         leading: IconButton(
           icon: const Icon(

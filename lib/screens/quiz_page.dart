@@ -1,6 +1,5 @@
 import 'package:app/model/quiz.dart';
 import 'package:app/screens/login_screen.dart';
-import 'package:app/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -48,10 +47,10 @@ class _QuizPageState extends State<QuizPage> {
 
   void _markAnswer(bool isCorrect) {
     if (isCorrect) {
-      scoreKeeper.add(const Icon(Icons.check, color: Colors.green));
+      // scoreKeeper.add(const Icon(Icons.check, color: Colors.green));
       mark += quiz.getQuestionRating();
     } else {
-      scoreKeeper.add(const Icon(Icons.close, color: Colors.red));
+      // scoreKeeper.add(const Icon(Icons.close, color: Colors.red));
     }
   }
 
@@ -69,7 +68,7 @@ class _QuizPageState extends State<QuizPage> {
       );
 
       if (quiz.isFinished()) {
-        // _markAnswer(selectedChoiceText == correctAnswer);
+        _markAnswer(selectedChoiceText == correctAnswer);
 
         Alert(
           style: const AlertStyle(),
@@ -108,7 +107,7 @@ class _QuizPageState extends State<QuizPage> {
           ],
         ).show();
       } else {
-        // _markAnswer(selectedChoiceText == correctAnswer);
+        _markAnswer(selectedChoiceText == correctAnswer);
         quiz.nextQuestion();
         numberQuestion++;
         selectedChoice = null;
@@ -122,19 +121,19 @@ class _QuizPageState extends State<QuizPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SettingScreen(),
-                ),
-              );
-            },
-            icon: const Icon(
-              Icons.settings,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => SettingScreen(),
+          //       ),
+          //     );
+          //   },
+          //   icon: const Icon(
+          //     Icons.settings,
+          //   ),
+          // ),
         ],
         leading: IconButton(
           icon: const Icon(
