@@ -21,6 +21,8 @@ class _QuizPageState extends State<QuizPage> {
   int mark = 0;
   int totalQuestionsCount = 0;
   int numberQuestion = 1;
+  int? correctAnswerIndex;
+  int? wrongAnswerIndex;
 
   @override
   void initState() {
@@ -59,6 +61,9 @@ class _QuizPageState extends State<QuizPage> {
 
     String selectedChoiceText = quiz.getChoices()[selectedChoice!];
     String correctAnswer = quiz.getCorrectAnswer();
+    correctAnswerIndex = quiz.getChoices().indexOf(correctAnswer);
+    wrongAnswerIndex =
+        selectedChoiceText == correctAnswer ? null : selectedChoice;
 
     setState(() {
       quiz.updateQuestionBank(
@@ -108,10 +113,17 @@ class _QuizPageState extends State<QuizPage> {
         ).show();
       } else {
         _markAnswer(selectedChoiceText == correctAnswer);
-        quiz.nextQuestion();
-        numberQuestion++;
-        selectedChoice = null;
       }
+    });
+
+    // Wait 2 seconds before moving to the next question
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      quiz.nextQuestion();
+      numberQuestion++;
+      selectedChoice = null;
+      correctAnswerIndex = null;
+      wrongAnswerIndex = null;
     });
   }
 
@@ -221,22 +233,33 @@ class _QuizPageState extends State<QuizPage> {
                       ),
                       itemCount: quiz.getChoices().length,
                       itemBuilder: (context, index) {
+                        Color tileColor = Colors.blue.shade300;
+
+                        if (correctAnswerIndex != null) {
+                          if (index == correctAnswerIndex) {
+                            tileColor = Colors.green;
+                          } else if (index == wrongAnswerIndex) {
+                            tileColor = Colors.red;
+                          }
+                        } else if (selectedChoice == index) {
+                          tileColor = Colors.blue.shade600;
+                        }
+
                         return GestureDetector(
-                          onTap: () {
-                            setState(
-                              () {
-                                selectedChoice = index;
-                              },
-                            );
-                          },
+                          onTap: correctAnswerIndex == null
+                              ? () {
+                                  setState(() {
+                                    selectedChoice = index;
+                                  });
+                                }
+                              : null, // Disable further selection after submission
                           child: Container(
                             decoration: BoxDecoration(
-                              color: selectedChoice == index
-                                  ? Colors.blue.shade600
-                                  : Colors.blue.shade300,
+                              color: tileColor,
                               borderRadius: BorderRadius.circular(15),
                               border: Border.all(
-                                color: selectedChoice == index
+                                color: selectedChoice == index &&
+                                        correctAnswerIndex == null
                                     ? Colors.blueAccent
                                     : Colors.transparent,
                                 width: 2,
@@ -246,20 +269,23 @@ class _QuizPageState extends State<QuizPage> {
                               title: Text(
                                 quiz.getChoices()[index],
                                 style: TextStyle(
-                                  color: selectedChoice == index
-                                      ? Colors.white
-                                      : Colors.black,
+                                  color: tileColor == Colors.blue.shade300 ||
+                                          tileColor == Colors.blue.shade600
+                                      ? Colors.black
+                                      : Colors.white,
                                   fontSize: 18,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               value: index,
                               groupValue: selectedChoice,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedChoice = value;
-                                });
-                              },
+                              onChanged: correctAnswerIndex == null
+                                  ? (value) {
+                                      setState(() {
+                                        selectedChoice = value;
+                                      });
+                                    }
+                                  : null,
                               activeColor: Colors.white,
                             ),
                           ),
