@@ -27,9 +27,9 @@ rise of technology.
 
 # Technologies Used: 
 
-Dart and Flutter cross Platform 
-Node.js
-MongoDB
+. Dart and Flutter cross Platform 
+. Node.js
+. MongoDB
 
 
 
