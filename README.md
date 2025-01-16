@@ -12,17 +12,17 @@ rise of technology.
 • Role Based Access 
   1. Teachers and students have different privileges. 
 • Authentication Management 
- 1. Users can register / login to the system using their credentials. 
- 2. “Remember me” feature to make the process of logging in again easier. 
+  1. Users can register / login to the system using their credentials. 
+  2. “Remember me” feature to make the process of logging in again easier. 
 • Quiz Management 
- 1. Teacher can perform CRUD operations over the quizzes.
- 2. Teacher can “Open” or “Close” the quiz by changing its status.
- 3. Teacher can see the number of students and questions created.
- 4. Teacher can see the results of students who took the quiz. 
+  1. Teacher can perform CRUD operations over the quizzes.
+  2. Teacher can “Open” or “Close” the quiz by changing its status.
+  3. Teacher can see the number of students and questions created.
+  4. Teacher can see the results of students who took the quiz. 
 • Quiz Participation
-1. Students can see real-time feedback on their answers if it’s correct or false.
-2. Students can access the quiz easily using their intended dashboard.
-3.  Students can see their personal scores.
+ 1. Students can see real-time feedback on their answers if it’s correct or false.
+ 2. Students can access the quiz easily using their intended dashboard.
+ 3.  Students can see their personal scores.
 
 
 # Technologies Used: 
