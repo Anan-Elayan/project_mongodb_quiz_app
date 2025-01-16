@@ -1,4 +1,4 @@
-# app
+# Objective
 
 This project came to solve major problem that faces the student on their daily life especially 
 those in Palestine that faces the occupation restrictions on transportation, also it provides the 
@@ -8,7 +8,7 @@ teachers easier and make the process of making quiz more accessible to everyone 
 rise of technology.
 
 
-Scope 
+# Scope 
 • Role Based Access 
   1. Teachers and students have different privileges. 
 • Authentication Management 
